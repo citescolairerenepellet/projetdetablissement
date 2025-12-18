@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang=fr>
+<head>
+  <meta charset=utf-8>
+  <meta name=viewport content="width=device-width,initial-scale=1">
+  <title>Projet d’établissement 2025-2026 — Infographie</title>
+  <meta name=color-scheme content="light dark">
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card:#101a2f;
+      --muted:#9fb0d0;
+      --text:#eaf0ff;
+      --line:rgba(255,255,255,.10);
+      --accent:#6ee7ff;
+      --accent2:#a78bfa;
+      --accent3:#34d399;
+      --accent4:#fbbf24;
+      --shadow: 0 20px 60px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    @media (prefers-color-scheme: light){
+      :root{
+        --bg:#f5f7ff;
+        --card:#ffffff;
+        --muted:#53627a;
+        --text:#0b1220;
+        --line:rgba(0,0,0,.10);
+        --shadow: 0 20px 60px rgba(30,41,59,.15);
+      }
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 800px at 10% 0%, rgba(110,231,255,.16), transparent 60%),
+                  radial-gradient(900px 700px at 100% 10%, rgba(167,139,250,.14), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+      line-height:1.45;
+    }
+
+    a{color:inherit; text-decoration:none}
+    .wrap{max-width:1100px; margin:0 auto; padding:22px 16px 56px}
+    
+    .topbar{
+      display:flex; gap:12px; align-items:center; justify-content:space-between;
+      padding:14px 14px;
+      background: color-mix(in oklab, var(--card), transparent 10%);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      position: sticky; top:12px; z-index:10;
+      backdrop-filter: blur(10px);
+    }
+    
+    .brand{
+      display:flex; gap:12px; align-items:center; min-width: 240px;
+    }
+    .logo{
+      width:44px; height:44px; border-radius:14px; overflow:hidden;
+      border:1px solid var(--line);
+      background:linear-gradient(135deg, rgba(110,231,255,.22), rgba(167,139,250,.18));
+      display:grid; place-items:center;
+    }
+    .logo img{width:100%; height:100%; object-fit:cover}
+
+    .brand h1{font-size:16px; margin:0}
+    .brand p{margin:2px 0 0; font-size:12px; color:var(--muted)}
+    
+    .nav{
+      display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;
+    }
+    .pill{
+      padding:10px 12px; border-radius:999px;
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 12%);
+      font-size:13px;
+    }
+    .pill:hover{transform: translateY(-1px)}
+    .pill strong{font-weight:700}
+    
+    .hero{
+      margin-top:18px;
+      padding:22px 18px;
+      border-radius: calc(var(--radius) + 4px);
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, color-mix(in oklab, var(--card), transparent 6%), color-mix(in oklab, var(--card), transparent 14%));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+      text-align: center;
+    }
+    .hero:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(600px 240px at 15% 0%, rgba(110,231,255,.18), transparent 60%),
+        radial-gradient(500px 240px at 85% 0%, rgba(167,139,250,.18), transparent 60%);
+      pointer-events:none;
+    }
+    .hero > *{position:relative}
+    .hero h2{margin:0; font-size:28px; letter-spacing:.2px}
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:14px;
+      margin-top:14px;
+    }
+    @media (max-width: 920px){
+      .grid{grid-template-columns:1fr}
+      .brand{min-width: unset}
+      .topbar{gap:10px; flex-direction:column; align-items:stretch}
+      .nav{justify-content:flex-start}
+    }
+
+    .card{
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 6%);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:16px;
+    }
+    .card h3{margin:0 0 10px; font-size:16px}
+    .muted{color:var(--muted)}
+    .kpis{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:10px;
+    }
+    @media (max-width: 680px){
+      .kpis{grid-template-columns:1fr}
+    }
+    .kpi{
+      padding:12px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 10%);
+    }
+    .kpi .label{font-size:12px; color:var(--muted)}
+    .kpi .value{font-size:22px; font-weight:800; margin-top:2px}
+    .kpi .hint{font-size:12px; color:var(--muted); margin-top:4px}
+
+    details{
+      border:1px solid var(--line);
+      border-radius:16px;
+      background: color-mix(in oklab, var(--card), transparent 10%);
+      overflow:hidden;
+    }
+    summary{
+      cursor:pointer;
+      list-style:none;
+      padding:12px 12px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      font-weight:700;
+    }
+    summary::-webkit-details-marker{display:none}
+    .detail-body{padding: 0 12px 12px}
+    .chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:8px}
+    .chip{
+      padding:8px 10px; border-radius:999px;
+      border:1px solid var(--line);
+      font-size:12px; color:var(--muted);
+      background: color-mix(in oklab, var(--card), transparent 14%);
+    }
+
+    .viz{
+      display:grid; grid-template-columns: 140px 1fr;
+      gap:14px; align-items:center;
+    }
+    @media (max-width: 520px){
+      .viz{grid-template-columns:1fr}
+    }
+    .donut{
+      width:140px; height:140px; border-radius:50%;
+      background: conic-gradient(
+        var(--accent) 0deg var(--aEnd),
+        var(--accent2) var(--aEnd) var(--bEnd),
+        var(--accent3) var(--bEnd) var(--cEnd),
+        var(--accent4) var(--cEnd) 360deg
+      );
+      position:relative;
+      border:1px solid var(--line);
+      box-shadow: inset 0 0 0 10px color-mix(in oklab, var(--card), transparent 0%);
+    }
+    .donut:after{
+      content:"";
+      position:absolute; inset:28px;
+      border-radius:50%;
+      background: color-mix(in oklab, var(--card), transparent 2%);
+      border:1px solid var(--line);
+    }
+    .legend{
+      display:grid; gap:8px;
+    }
+    .row{
+      display:flex; justify-content:space-between; gap:10px;
+      padding:8px 10px;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background: color-mix(in oklab, var(--card), transparent 12%);
+      font-size:13px;
+    }
+    .dot{width:10px; height:10px; border-radius:999px; display:inline-block; margin-right:8px}
+    .left{display:flex; align-items:center; gap:8px}
+    .right{color:var(--muted)}
+
+    /* --- FOOTER (STYLE EXACT DEMANDÉ) --- */
+    .foot{
+      margin-top:18px;
+      padding:12px 16px;
+      border-top:1px solid rgba(0,0,0,.08);
+      color:#6b7280;
+      font-size:12px;
+      text-align:center;
+    }
+
+    @media print{
+      .topbar{position:static; box-shadow:none}
+      body{background:#fff}
+      .card, .hero, .topbar{box-shadow:none}
+      a{color:#000}
+    }
+  </style>
+</head>
+
+<body>
+  <div class=wrap>
+    <header class=topbar>
+      <a href="index.html" class=brand>
+        <div class="logo">
+           <img src="logo-csrp.png" alt="">
+        </div>
+        <div>
+          <h1>Projet d’établissement</h1>
+          <p>Infographie 2025-2026</p>
+        </div>
+      </a>
+
+      <nav class=nav aria-label=Navigation>
+  <a class=pill href=index.html>Accueil</a>   <a class=pill href=01-sommaire.html>Sommaire</a>
+</nav>
+    </header>
+
+    <section class=hero>
+      <h2>Infographie 2025-2026</h2>
+    </section>
+
+    <section id=donnees class=grid>
+      <div class=card>
+        <h3>Effectifs élèves</h3>
+        <div class=viz>
+          <div class=donut id=donutEffectifs role=img aria-label="Répartition des effectifs par structure"></div>
+          <div class=legend id=legendEffectifs></div>
+        </div>
+        <div style="margin-top:14px; font-size:12px; color:var(--muted); text-align:center">
+          <div>Total établissement : <strong>223</strong> élèves</div>
+        </div>
+      </div>
+
+      <div class=card>
+        <h3>Repères rapides</h3>
+        <div class=kpis>
+          <div class=kpi>
+            <div class=label>Élèves notifiés MDPH</div>
+            <div class=value>125</div>
+            <div class=hint>56% des élèves</div>
+          </div>
+          <div class=kpi>
+            <div class=label>Boursiers</div>
+            <div class=value>61,4%</div>
+            <div class=hint>indicateur social</div>
+          </div>
+          <div class=kpi>
+            <div class=label>IPS familles</div>
+            <div class=value>84</div>
+            <div class=hint>indice de position sociale</div>
+          </div>
+        </div>
+
+        <div style="height:12px"></div>
+
+        <details open>
+          <summary>
+            Structures
+            <span class=muted>↕</span>
+          </summary>
+          <div class=detail-body>
+            <div class=chips>
+              <span class=chip>EREA élèves déficients visuels</span>
+              <span class=chip>École élémentaire</span>
+              <span class=chip>Collège</span>
+              <span class=chip>Lycée professionnel</span>
+              <span class=chip>GRETA</span>
+              <span class=chip>Internat éducatif</span>
+              <span class=chip>ULIS TFC</span>
+              <span class=chip>ULIS TSA</span>
+            </div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class=grid>
+      <div class=card>
+        <h3>Personnels</h3>
+
+        <details open>
+          <summary>
+            Enseignants et encadrement
+            <span class=muted>↕</span>
+          </summary>
+          <div class=detail-body>
+            <div class=row>
+              <div class=left><span class=dot style="background:var(--accent)"></span>Enseignants</div>
+              <div class=right><strong>55</strong> dont 9 contractuels</div>
+            </div>
+            <div class=row>
+              <div class=left><span class=dot style="background:var(--accent2)"></span>CAPPEI</div>
+              <div class=right><strong>65%</strong> des professeurs titulaires</div>
+            </div>
+            <div class=row>
+              <div class=left><span class=dot style="background:var(--accent3)"></span>Direction</div>
+              <div class=right><strong>3</strong> personnels</div>
+            </div>
+          </div>
+        </details>
+
+        <div style="height:10px"></div>
+
+        <details>
+          <summary>
+            Autres personnels
+            <span class=muted>↕</span>
+          </summary>
+          <div class=detail-body>
+            <div class=row><div class=left>AESH</div><div class=right><strong>33</strong></div></div>
+            <div class=row><div class=left>Administratifs</div><div class=right><strong>5</strong></div></div>
+            <div class=row><div class=left>Vie scolaire</div><div class=right><strong>11</strong></div></div>
+            <div class=row><div class=left>Médico-sociaux</div><div class=right><strong>4</strong></div></div>
+            <div class=row><div class=left>Agents</div><div class=right><strong>20</strong></div></div>
+          </div>
+        </details>
+      </div>
+
+      <div class=card>
+        <h3>Formations</h3>
+        <details open>
+          <summary>
+            CAP, Bac Pro, BTS, FCIL
+            <span class=muted>↕</span>
+          </summary>
+          <div class=detail-body>
+            <div class=chips>
+              <span class=chip>5 CAP : PSR</span>
+              <span class=chip>Vannerie</span>
+              <span class=chip>Cannage / Paillage</span>
+              <span class=chip>Horticulture</span>
+              <span class=chip>Jardinier / Paysagiste</span>
+            </div>
+            <div style="height:10px"></div>
+            <div class=chips>
+              <span class=chip>2 Bac Pro : MELEC</span>
+              <span class=chip>AGORA</span>
+            </div>
+            <div style="height:10px"></div>
+            <div class=chips>
+              <span class=chip>BTS SAM apprentissage (GRETA)</span>
+              <span class=chip>FCIL Design et création végétale</span>
+            </div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section id=accompagnement class=grid>
+      <div class=card>
+        <h3>Accompagnements</h3>
+
+        <details open>
+          <summary>
+            ULIS et notifications MDPH
+            <span class=muted>↕</span>
+          </summary>
+          <div class=detail-body>
+            <div class=row>
+              <div class=left>ULIS collège</div>
+              <div class=right><strong>1</strong> (TFC)</div>
+            </div>
+            <div class=row>
+              <div class=left>ULIS LP</div>
+              <div class=right><strong>3</strong> (2 TFC, 1 TSA)</div>
+            </div>
+            <div class=row>
+              <div class=left>Élèves notifiés MDPH</div>
+              <div class=right><strong>125</strong> (56%)</div>
+            </div>
+            <div class=row>
+              <div class=left>Aide humaine</div>
+              <div class=right><strong>79</strong> (63,2% des notifiés)</div>
+            </div>
+            <div class=row>
+              <div class=left>ULIS</div>
+              <div class=right><strong>44</strong> (35,2% des notifiés)</div>
+            </div>
+          </div>
+        </details>
+
+        <div style="height:10px"></div>
+
+        <details>
+          <summary>
+            Partenaires
+            <span class=muted>↕</span>
+          </summary>
+          <div class=detail-body>
+            <div class=chips>
+              <span class=chip>S3AS</span>
+              <span class=chip>SESSAD (troubles fonctions auditives)</span>
+              <span class=chip>SESSAD (TSA)</span>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div id=budget class=card>
+        <h3>Indicateurs économiques</h3>
+        <div class=viz>
+          <div class=donut id=donutBudget role=img aria-label="Répartition du budget"></div>
+          <div class=legend id=legendBudget></div>
+        </div>
+        <div style="margin-top:14px; font-size:12px; color:var(--muted); text-align:center">
+          <div>Total : <strong>646 500 €</strong></div>
+          <div class=muted>412 000 + 85 500 + 41 500</div>
+        </div>
+      </div>
+    </section>
+
+    <footer class=foot>
+      <div>Projet d’établissement 2026-2030 — Cité scolaire René Pellet</div>
+    </footer>
+  </div>
+
+  <script>
+    function formatPct(x){
+      return (Math.round(x * 10) / 10).toString().replace(".", ",") + "%";
+    }
+
+    function renderDonut(cfg){
+      const total = cfg.items.reduce((s,it)=>s+it.value,0);
+      let start = 0;
+      let gradientParts = [];
+      const colors = ["var(--accent)","var(--accent2)","var(--accent3)","var(--accent4)","var(--accent)","var(--accent2)"];
+      
+      if(cfg.legend) cfg.legend.innerHTML = "";
+      
+      cfg.items.forEach((it, idx) => {
+        const p = (it.value/total)*100;
+        const end = start + (p/100)*360;
+        const color = colors[idx % colors.length];
+        
+        gradientParts.push(color + " " + start + "deg " + end + "deg");
+        
+        if(cfg.legend){
+          const row = document.createElement("div");
+          row.className = "row";
+          row.innerHTML =
+            "<div class=left><span class=dot style=background:" + color + "></span>" +
+            it.label + "</div>" +
+            "<div class=right><strong>" + it.value + "</strong> — " + formatPct(p) + "</div>";
+          cfg.legend.appendChild(row);
+        }
+        
+        start = end;
+      });
+      
+      if(cfg.el){
+        cfg.el.style.background = "conic-gradient(" + gradientParts.join(", ") + ")";
+      }
+      
+      if(cfg.footerTotal){
+        cfg.footerTotal.textContent = total.toString();
+      }
+    }
+
+    renderDonut({
+      el: document.getElementById("donutEffectifs"),
+      legend: document.getElementById("legendEffectifs"),
+      items: [
+        { label: "École élémentaire", value: 21 },
+        { label: "Collège", value: 40 },
+        { label: "Lycée professionnel", value: 143 },
+        { label: "BTS (apprentis)", value: 14 },
+        { label: "FCIL", value: 5 }
+      ]
+    });
+
+    renderDonut({
+      el: document.getElementById("donutBudget"),
+      legend: document.getElementById("legendBudget"),
+      items: [
+        { label: "Fonctionnement et viabilisation", value: 412000 },
+        { label: "Vie de l’élève et pédagogie", value: 85500 },
+        { label: "Investissement", value: 41500 },
+        { label: "Autres / non précisé", value: 646500 - (412000 + 85500 + 41500) }
+      ]
+    });
+  </script>
+</body>
+</html>

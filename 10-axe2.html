@@ -1,0 +1,694 @@
+<!doctype html>
+<html lang=fr>
+<head>
+  <meta charset=utf-8>
+  <meta name=viewport content="width=device-width,initial-scale=1">
+  <title>Axe 2 — Accessibilité et fondamentaux</title>
+  <meta name=color-scheme content="light dark">
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card:#101a2f;
+      --muted:#9fb0d0;
+      --text:#eaf0ff;
+      --line:rgba(255,255,255,.10);
+      --accent:#6ee7ff;
+      --radius:20px;
+      /* Couleurs poles */
+      --on-bg: rgba(52,211,153,.15);
+      --on-txt: #34d399;
+    }
+    @media (prefers-color-scheme: light){
+      :root{
+        --bg:#f5f7ff;
+        --card:#ffffff;
+        --muted:#53627a;
+        --text:#0b1220;
+        --line:rgba(0,0,0,.10);
+        --on-bg: rgba(16,185,129,.12);
+        --on-txt: #059669;
+      }
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(1200px 800px at 10% 0%, rgba(110,231,255,.16), transparent 60%),
+        radial-gradient(900px 700px at 100% 10%, rgba(167,139,250,.14), transparent 55%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.55;
+    }
+    a{color:inherit; text-decoration:none}
+    .wrap{max-width:1100px; margin:0 auto; padding:22px 16px 56px}
+    
+    .topbar{
+      display:flex; gap:12px; align-items:center; justify-content:space-between;
+      padding:14px 14px;
+      background: color-mix(in oklab, var(--card), transparent 10%);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      position: sticky; top:12px; z-index:10;
+      backdrop-filter: blur(10px);
+    }
+    
+    .brand{display:flex; gap:12px; align-items:center; min-width: 240px;}
+    .logo{
+      width:44px; height:44px; border-radius:14px; overflow:hidden;
+      border:1px solid var(--line);
+      background:linear-gradient(135deg, rgba(110,231,255,.22), rgba(167,139,250,.18));
+      display:grid; place-items:center;
+    }
+    .logo img{width:100%; height:100%; object-fit:cover}
+
+    .brand h1{font-size:16px; margin:0}
+    .brand p{margin:2px 0 0; font-size:12px; color:var(--muted)}
+    
+    .nav{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end}
+    .pill{
+      padding:10px 12px; border-radius:999px;
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 12%);
+      font-size:13px;
+    }
+    .pill:hover{transform: translateY(-1px)}
+    @media (max-width: 920px){
+      .topbar{flex-direction:column; align-items:stretch}
+      .nav{justify-content:flex-start}
+    }
+
+    /* HERO CENTRÉ */
+    .hero{
+      margin-top:18px;
+      padding:40px 18px;
+      border-radius: calc(var(--radius) + 6px);
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, color-mix(in oklab, var(--card), transparent 6%), color-mix(in oklab, var(--card), transparent 14%));
+      text-align: center;
+    }
+    .axe-label{
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 8px;
+        background: color-mix(in oklab, var(--accent), transparent 85%);
+        color: var(--accent);
+        font-weight: 900;
+        font-size: 14px;
+        margin-bottom: 12px;
+        border: 1px solid color-mix(in oklab, var(--accent), transparent 70%);
+    }
+    .hero h2{margin:0; font-size:28px; line-height: 1.3;}
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 260px;
+      gap:14px;
+      margin-top:14px;
+    }
+    @media (max-width:900px){.grid{grid-template-columns:1fr}}
+
+    .card{
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 6%);
+      border-radius: var(--radius);
+      padding:16px;
+    }
+    .card h3{margin:0 0 4px; font-size:18px}
+    .muted{color:var(--muted); font-size: 14px;}
+
+    /* Navigation Repères */
+    .axes{display:grid; gap:8px; margin-top: 14px;}
+    .ax{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+      background:color-mix(in oklab, var(--card), transparent 10%);
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background 0.2s, transform 0.2s;
+      font-size: 13px;
+    }
+    .ax b{display:block; font-size: 14px; margin-bottom: 2px;}
+    
+    .ax.active {
+        border: 1px solid var(--accent);
+        background: linear-gradient(90deg, color-mix(in oklab, var(--accent), transparent 85%), transparent);
+        cursor: default;
+        position: relative;
+        padding-left: 16px;
+    }
+    .ax.active::after {
+        content: "➔"; color: var(--accent); font-weight: 900; margin-left: 10px; font-size: 18px;
+    }
+    a.ax:hover {
+        background: color-mix(in oklab, var(--card), transparent 18%);
+        transform: translateX(4px);
+    }
+
+    /* Contenu */
+    details{
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:color-mix(in oklab, var(--card), transparent 10%);
+      overflow:hidden;
+      margin-top:12px;
+    }
+    summary{
+      cursor:pointer;
+      list-style:none;
+      padding:16px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      font-weight:900;
+      font-size: 15px;
+    }
+    summary::-webkit-details-marker{display:none}
+    .body{padding:0 16px 16px}
+
+    .obj{
+      margin-top:20px;
+      margin-bottom: 10px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid var(--line);
+    }
+    .obj .t{
+        font-weight:900; 
+        color:var(--text);
+        text-transform: uppercase;
+        font-size: 12px;
+        letter-spacing: 1px;
+        opacity: 0.7;
+    }
+    .obj .s{color:var(--text); font-size:15px; margin-top:4px; font-weight:700}
+
+    .act{
+      margin-top:10px;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:14px;
+      background:color-mix(in oklab, var(--card), transparent 6%);
+    }
+    
+    .act .row{display:grid; grid-template-columns: 1fr 140px; gap:20px}
+    @media (max-width: 600px){ .act .row{grid-template-columns:1fr} }
+    
+    .act .txt b{display:block; font-size:14px; line-height: 1.4}
+    .act .txt p{margin:4px 0 0; color:var(--muted); font-size:13px}
+    
+    .pole-col { text-align: right; }
+    @media (max-width: 600px){ .pole-col { text-align: left; margin-top: 8px; } }
+
+    .pole-lbl { font-size: 10px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; font-weight: 700; }
+    .poles{display:flex; gap:4px; flex-wrap:wrap; justify-content:flex-end}
+    @media (max-width: 600px){ .poles { justify-content: flex-start; } }
+
+    .pole{
+      padding:4px 8px;
+      border-radius:6px;
+      border:1px solid var(--line);
+      background:color-mix(in oklab, var(--card), transparent 16%);
+      font-size:11px;
+      color:var(--muted);
+      font-weight:700;
+    }
+    .pole.on{color:var(--on-txt); background:var(--on-bg); border-color:var(--on-txt)}
+    .pole.off{opacity:0.2;}
+
+    .foot{
+      margin-top:18px;
+      padding:12px 16px;
+      border-top:1px solid rgba(0,0,0,.08);
+      color:#6b7280;
+      font-size:12px;
+      text-align:center;
+    }
+
+    @media print{
+      .topbar{position:static; box-shadow:none}
+      body{background:#fff}
+      .card,.hero,.topbar,details{box-shadow:none}
+    }
+  </style>
+</head>
+
+<body>
+  <div class=wrap>
+    <header class=topbar>
+      <a href="index.html" class=brand>
+        <div class="logo">
+           <img src="logo-csrp.png" alt="">
+        </div>
+        <div>
+          <h1>Projet d’établissement</h1>
+          <p>Axe 2</p>
+        </div>
+      </a>
+
+      <nav class=nav aria-label=Navigation>
+  <a class=pill href=index.html>Accueil</a>   <a class=pill href=01-sommaire.html>Sommaire</a>
+</nav>
+    </header>
+
+    <section class=hero>
+      <div class=axe-label>AXE 2</div>
+      <h2>Garantir l’accessibilité des apprentissages<br>et la maîtrise des savoirs fondamentaux pour tous</h2>
+    </section>
+
+    <div class=grid>
+      
+      <div id="content">
+        
+        <section class=card>
+          <h3>Orientation 1</h3>
+          <div class=muted>Accompagner les élèves à besoins éducatifs particuliers</div>
+
+          <details>
+            <summary>Objectifs et actions envisagées pour 2026-2030 <span>▼</span></summary>
+            <div class=body>
+              
+              <div class=obj>
+                <div class=t>Objectif 1</div>
+                <div class=s>Accueillir la diversité des profils d’élèves et faire de cette richesse un levier de réussite collective</div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>Mettre en œuvre une politique d’accueil des élèves</b>
+                    <p>Actions CVC, CVL...</p>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole on">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole on">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt><b>Mettre en œuvre une dynamique d’échanges entre élèves</b></div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole on">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole on">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>Développer une pédagogie de projet interdisciplinaire et inter-établissement</b>
+                    <p>Favoriser les rencontres entre élèves</p>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole on">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole on">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=obj>
+                <div class=t>Objectif 2</div>
+                <div class=s>Identifier les besoins spécifiques de chaque élève afin d’y répondre de manière adaptée</div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>Travailler en lien avec les partenaires dans et hors établissement</b>
+                    <p>Pour mieux connaitre les besoins des élèves</p>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole off">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole on">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>Former les personnels aux caractéristiques des troubles et handicaps des élèves</b>
+                    <p>Pour construire des accompagnements pédagogiques et éducatifs adaptés aux élèves</p>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole on">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole on">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=obj>
+                <div class=t>Objectif 3</div>
+                <div class=s>Mettre en œuvre des mesures de compensation, d’accompagnement pédagogique et éducatif personnalisées</div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>Garantir le bon fonctionnement des instances d’accompagnement</b>
+                    <p>Équipe éducative, ESS, commission outils adaptés, conseils de mi-semestre</p>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole on">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole off">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>Garantir l’expertise des enseignants dans la mise en œuvre de l’accompagnement pédagogique</b>
+                    <p>Choix du support adapté, méthodes d’apprentissage...</p>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole on">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole off">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>Développer des outils efficaces pour communiquer sur les besoins des élèves et développer des gestes professionnels</b>
+                    <p>Savoir lire et écrire et mettre en œuvre un PPRE, un PAP et une MOPPS</p>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole on">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole on">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </details>
+        </section>
+
+        <section class=card style="margin-top:14px">
+          <h3>Orientation 2</h3>
+          <div class=muted>Assurer l’accessibilité aux attendus scolaires pour tous</div>
+
+          <details>
+            <summary>Objectifs et actions envisagées pour 2026-2030 <span>▼</span></summary>
+            <div class=body>
+              <div class=obj>
+                <div class=t>Objectif 1</div>
+                <div class=s>Placer la maîtrise des savoirs fondamentaux au cœur des apprentissages</div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>Donner l’accès, à chaque élève, aux apprentissages spécifiques dont il a besoin</b>
+                    <p>Braille, braille numérique, informatique adapté, DER, maitrise de la langue française</p>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole on">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole on">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>Renforcer les apprentissages fondamentaux au lycée professionnel</b>
+                    <p>Lire, écrire, compter</p>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole off">École</span>
+                      <span class="pole off">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole off">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>Favoriser la maitrise des langages pour garantir les réussites scolaires et l’insertion sociale et professionnelle</b>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole on">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole on">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=obj>
+                <div class=t>Objectif 2</div>
+                <div class=s>Mutualiser les pratiques professionnelles et encourager la coopération au sein des équipes pour renforcer l’efficacité pédagogique</div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>Favoriser la concertation pédagogique entre enseignants et AESH</b>
+                    <p>Café pédagogique, conseils pédagogique, concertation hebdomadaire, groupes ressources</p>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole on">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole off">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt><b>Favoriser les temps de transmission entre les enseignants expert et les nouvellement nommés</b></div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole on">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole off">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>Veiller à la représentativité des métiers de la CSRP dans les instances pédagogiques</b>
+                    <p>Pour une vision plus "complète" des élèves</p>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole on">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole on">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </details>
+        </section>
+
+        <section class=card style="margin-top:14px">
+          <h3>Orientation 3</h3>
+          <div class=muted>Développer les compétences et la confiance des élèves</div>
+
+          <details>
+            <summary>Objectifs et actions envisagées pour 2026-2030 <span>▼</span></summary>
+            <div class=body>
+              <div class=obj>
+                <div class=t>Objectif 1</div>
+                <div class=s>Promouvoir l’apprentissage par compétences</div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>S’appuyer sur une pédagogie explicite</b>
+                    <p>Afin que les élèves mettent du sens sur les apprentissages, leur scolarité et leur projet de formation</p>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole on">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole off">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt><b>Mettre en œuvre des référentiels de compétences en informatique adaptée</b></div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole on">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole off">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>Aller vers des modes d’évaluation diversifiés au regard des profils et des besoins des élèves</b>
+                    <p>Afin qu’ils prennent la mesure de leur progression</p>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole on">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole off">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=obj>
+                <div class=t>Objectif 2</div>
+                <div class=s>Favoriser la confiance en soi comme moteur essentiel de l’envie d’apprendre et de la réussite</div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>Placer les compétences psycho-sociales au cœur des apprentissages</b>
+                    <p>Pour encourager les élèves</p>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole on">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole on">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>Favoriser la coopération entre pairs</b>
+                    <p>Pour dépasser les difficultés d’apprentissage et les obstacles du handicap</p>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole on">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole on">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </details>
+        </section>
+
+      </div>
+
+      <div class=card style="height:fit-content">
+        <h3>Repères</h3>
+        <div class=axes>
+          <a href="09-axe1.html" class="ax">
+            <div><b>Axe 1</b><span>Parcours personnalisé</span></div>
+          </a>
+          
+          <div class="ax active">
+            <div><b>Axe 2</b><span>Accessibilité</span></div>
+          </div>
+          
+          <a href="11-axe3.html" class="ax">
+            <div><b>Axe 3</b><span>Bien-être</span></div>
+          </a>
+          <a href="12-axe4.html" class="ax">
+            <div><b>Axe 4</b><span>Identité EREA</span></div>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <footer class=foot>
+      <div>Projet d’établissement 2026-2030 — Cité scolaire René Pellet</div>
+    </footer>
+  </div>
+
+  <script>
+    ;(function(){
+      try{ localStorage.setItem('pe_last_file', (location.pathname.split('/').pop() || '10-axe2.html')) }catch(e){}
+    })()
+  </script>
+</body>
+</html>

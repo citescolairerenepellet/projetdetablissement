@@ -1,0 +1,760 @@
+<!doctype html>
+<html lang=fr>
+<head>
+  <meta charset=utf-8>
+  <meta name=viewport content="width=device-width,initial-scale=1">
+  <title>Le Pôle DV — CSRP</title>
+  <meta name=color-scheme content="light dark">
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card:#101a2f;
+      --muted:#9fb0d0;
+      --text:#eaf0ff;
+      --line:rgba(255,255,255,.10);
+      --shadow: 0 18px 55px rgba(0,0,0,.35);
+      --radius:20px;
+
+      --c1:#6ee7ff;
+      --c2:#a78bfa;
+      --c3:#34d399;
+      --c4:#fbbf24;
+      --c5:#fb7185;
+      --c6:#22c55e;
+    }
+    @media (prefers-color-scheme: light){
+      :root{
+        --bg:#f5f7ff;
+        --card:#ffffff;
+        --muted:#53627a;
+        --text:#0b1220;
+        --line:rgba(0,0,0,.10);
+        --shadow: 0 18px 55px rgba(30,41,59,.14);
+      }
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(1200px 800px at 10% 0%, rgba(110,231,255,.16), transparent 60%),
+        radial-gradient(900px 700px at 100% 10%, rgba(167,139,250,.14), transparent 55%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.55;
+    }
+    a{color:inherit; text-decoration:none}
+    .wrap{max-width:1100px; margin:0 auto; padding:22px 16px 56px}
+    
+    .topbar{
+      display:flex; gap:12px; align-items:center; justify-content:space-between;
+      padding:14px 14px;
+      background: color-mix(in oklab, var(--card), transparent 10%);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      position: sticky; top:12px; z-index:10;
+      backdrop-filter: blur(10px);
+    }
+    
+    .brand{display:flex; gap:12px; align-items:center; min-width: 240px;}
+    .logo{
+      width:44px; height:44px; border-radius:14px; overflow:hidden;
+      border:1px solid var(--line);
+      background:linear-gradient(135deg, rgba(110,231,255,.22), rgba(167,139,250,.18));
+      display:grid; place-items:center;
+    }
+    .logo img{width:100%; height:100%; object-fit:cover}
+
+    .brand h1{font-size:16px; margin:0}
+    .brand p{margin:2px 0 0; font-size:12px; color:var(--muted)}
+    
+    .nav{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end}
+    .pill{
+      padding:10px 12px; border-radius:999px;
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 12%);
+      font-size:13px;
+    }
+    .pill:hover{transform: translateY(-1px)}
+    @media (max-width: 920px){
+      .topbar{flex-direction:column; align-items:stretch}
+      .nav{justify-content:flex-start}
+    }
+
+    .hero{
+      margin-top:18px;
+      padding:22px 18px;
+      border-radius: calc(var(--radius) + 6px);
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, color-mix(in oklab, var(--card), transparent 6%), color-mix(in oklab, var(--card), transparent 14%));
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+      text-align: center;
+    }
+    .hero:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(700px 260px at 12% 0%, rgba(110,231,255,.18), transparent 62%),
+        radial-gradient(600px 260px at 88% 0%, rgba(52,211,153,.14), transparent 62%);
+      pointer-events:none;
+    }
+    .hero > *{position:relative}
+    .hero h2{margin:0; font-size:28px}
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+      margin-top:14px;
+    }
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
+    }
+
+    .card{
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 6%);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:16px;
+      overflow:hidden;
+    }
+    .card h3{margin:0 0 10px; font-size:16px}
+    .muted{color:var(--muted)}
+
+    .tabs{display:flex; gap:8px; flex-wrap:wrap; margin:10px 0 0}
+    .tab{
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 12%);
+      font-size:13px;
+      cursor:pointer;
+      user-select:none;
+      font-weight:900;
+    }
+    .tab[aria-selected="true"]{
+      background: linear-gradient(135deg, rgba(110,231,255,.22), rgba(167,139,250,.18));
+    }
+
+    .viz{
+      display:grid;
+      grid-template-columns: 160px 1fr;
+      gap:12px;
+      align-items:center;
+      margin-top:10px;
+    }
+    @media (max-width: 520px){
+      .viz{grid-template-columns:1fr}
+    }
+
+    svg{display:block; width:100%; height:auto}
+    .legend{display:grid; gap:8px}
+    .lrow{
+      display:flex; justify-content:space-between; gap:10px;
+      padding:9px 10px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 12%);
+      font-size:13px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .lrow[aria-pressed="false"]{opacity:.55}
+    .lleft{display:flex; align-items:center; gap:8px}
+    .dot{width:10px; height:10px; border-radius:999px; display:inline-block}
+    .lright{color:var(--muted)}
+
+    .kpis{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:10px;
+      margin-top:10px;
+    }
+    @media (max-width: 760px){
+      .kpis{grid-template-columns:1fr}
+    }
+    .kpi{
+      padding:12px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 10%);
+    }
+    .kpi .label{font-size:12px; color:var(--muted)}
+    .kpi .value{font-size:20px; font-weight:900; margin-top:2px}
+    .kpi .hint{font-size:12px; color:var(--muted); margin-top:4px}
+
+    details{
+      border:1px solid var(--line);
+      border-radius:18px;
+      background: color-mix(in oklab, var(--card), transparent 10%);
+      overflow:hidden;
+      margin-top:12px;
+    }
+    summary{
+      cursor:pointer;
+      list-style:none;
+      padding:12px 12px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      font-weight:900;
+    }
+    summary::-webkit-details-marker{display:none}
+    .body{padding: 0 12px 12px}
+
+    table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      overflow:hidden;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 12%);
+      font-size:13px;
+      margin-top:10px;
+    }
+    th,td{padding:10px 10px; border-bottom:1px solid var(--line); text-align:center}
+    th{color:var(--muted); font-weight:900}
+    td:first-child, th:first-child{text-align:left}
+    tr:last-child td{border-bottom:none}
+    .sub{font-size:12px; color:var(--muted); margin-top:10px}
+
+    .tooltip{
+      position:fixed;
+      pointer-events:none;
+      transform: translate(-50%, -120%);
+      padding:10px 10px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 0%);
+      box-shadow: var(--shadow);
+      color:var(--text);
+      font-size:12px;
+      display:none;
+      max-width: 260px;
+    }
+    .tooltip b{display:block; margin-bottom:2px}
+
+    /* Footer Standardisé */
+    .foot{
+      margin-top:18px;
+      padding:12px 16px;
+      border-top:1px solid rgba(0,0,0,.08);
+      color:#6b7280;
+      font-size:12px;
+      text-align:center;
+    }
+
+    @media print{
+      .topbar{position:static; box-shadow:none}
+      body{background:#fff}
+      .card,.hero,.topbar,details{box-shadow:none}
+      .tooltip{display:none!important}
+    }
+  </style>
+</head>
+
+<body>
+  <div class=wrap>
+    <header class=topbar>
+      <a href="index.html" class=brand>
+        <div class="logo">
+           <img src="logo-csrp.png" alt="">
+        </div>
+        <div>
+          <h1>Projet d’établissement</h1>
+          <p>Le Pôle DV</p>
+        </div>
+      </a>
+
+      <nav class=nav aria-label=Navigation>
+  <a class=pill href=index.html>Accueil</a>   <a class=pill href=01-sommaire.html>Sommaire</a>
+</nav>
+    </header>
+
+    <section class=hero>
+      <h2>Caractéristiques du public scolaire et besoins en matériel pédagogique adapté</h2>
+    </section>
+
+    <section class=grid>
+      <div class=card>
+        <h3>Régimes</h3>
+
+        <div class=tabs>
+          <div class=tab role=tab tabindex=0 aria-selected=true id=tabRegCollege>Collège</div>
+          <div class=tab role=tab tabindex=0 aria-selected=false id=tabRegEcole>École</div>
+        </div>
+
+        <div class=viz>
+          <svg id=svgReg viewBox="0 0 160 160" role=img aria-label="Camembert des régimes"></svg>
+          <div class=legend id=legReg></div>
+        </div>
+
+        <div class=kpis id=kpiReg></div>
+
+        <details>
+          <summary>Tableau par niveau <span class=muted>↕</span></summary>
+          <div class=body>
+            <div id=tblReg></div>
+          </div>
+        </details>
+      </div>
+
+      <div class=card>
+        <h3>Notifications</h3>
+
+        <div class=tabs>
+          <div class=tab role=tab tabindex=0 aria-selected=true id=tabNotCollege>Collège</div>
+          <div class=tab role=tab tabindex=0 aria-selected=false id=tabNotEcole>École</div>
+        </div>
+
+        <div class=sub>Lecture rapide : nombre d’élèves notifiés et pourcentage indiqué dans la figure source</div>
+
+        <div id=tblNot></div>
+      </div>
+    </section>
+
+    <section class=grid>
+      <div class=card>
+        <h3>Nature des notifications Aide Humaine</h3>
+
+        <div class=tabs>
+          <div class=tab role=tab tabindex=0 aria-selected=true id=tabAhCollege>Collège</div>
+          <div class=tab role=tab tabindex=0 aria-selected=false id=tabAhEcole>École</div>
+        </div>
+
+        <div class=viz>
+          <svg id=svgAh viewBox="0 0 160 160" role=img aria-label="Camembert nature aide humaine"></svg>
+          <div class=legend id=legAh></div>
+        </div>
+
+        <div class=kpis id=kpiAh></div>
+      </div>
+
+      <div class=card>
+        <h3>Matériel pédagogique adapté</h3>
+
+        <div class=sub>Focus sur le MPA à la Cité scolaire René Pellet — rentrée 2025</div>
+
+        <div class=tabs>
+          <div class=tab role=tab tabindex=0 aria-selected=true id=tabMpaCollege>Collège</div>
+          <div class=tab role=tab tabindex=0 aria-selected=false id=tabMpaEcole>École</div>
+        </div>
+
+        <div class=viz>
+          <svg id=svgMpa viewBox="0 0 160 160" role=img aria-label="Camembert MPA"></svg>
+          <div class=legend id=legMpa></div>
+        </div>
+
+        <details open>
+          <summary>Tableau (rentrée 2025) <span class=muted>↕</span></summary>
+          <div class=body>
+            <div id=tblMpa></div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <footer class=foot>
+      <div>Projet d’établissement 2026-2030 — Cité scolaire René Pellet</div>
+    </footer>
+  </div>
+
+  <div class=tooltip id=tip></div>
+
+  <script>
+    ;(function(){
+      try{ localStorage.setItem("pe_last_file", (location.pathname.split("/").pop() || "05-pole-dv.html")) }catch(e){}
+    })()
+
+    const tip = document.getElementById("tip")
+    function showTip(x,y,html){
+      tip.innerHTML = html
+      tip.style.left = x + "px"
+      tip.style.top = y + "px"
+      tip.style.display = "block"
+    }
+    function hideTip(){ tip.style.display = "none" }
+
+    const palette = ["var(--c1)","var(--c2)","var(--c3)","var(--c4)","var(--c5)","var(--c6)"]
+
+    function polar(cx, cy, r, ang){
+      const a = (ang - 90) * Math.PI / 180
+      return { x: cx + r*Math.cos(a), y: cy + r*Math.sin(a) }
+    }
+    function arcPath(cx, cy, r, start, end){
+      const s = polar(cx, cy, r, end)
+      const e = polar(cx, cy, r, start)
+      const large = (end - start) <= 180 ? 0 : 1
+      return `M ${s.x} ${s.y} A ${r} ${r} 0 ${large} 0 ${e.x} ${e.y} L ${cx} ${cy} Z`
+    }
+    function clear(node){ while(node.firstChild) node.removeChild(node.firstChild) }
+
+    function makeDonut(svg, legend, items, opts){
+      const total = items.reduce((s,i)=>s+i.value,0) || 1
+      const cx=80, cy=80, r=72
+      const inner=40
+
+      clear(svg); clear(legend)
+
+      const state = items.map(()=>true)
+
+      const ns="http://www.w3.org/2000/svg"
+      const g=document.createElementNS(ns,"g")
+
+      let ang=0
+      const slices=[]
+      items.forEach((it,idx)=>{
+        const pct = (it.value/total)*100
+        const dAng = (pct/100)*360
+        const start = ang
+        const end = ang + dAng
+        ang = end
+
+        const p=document.createElementNS(ns,"path")
+        p.setAttribute("d", arcPath(cx,cy,r,start,end))
+        p.setAttribute("fill", palette[idx % palette.length])
+        p.setAttribute("opacity","0.95")
+
+        p.addEventListener("mousemove",(e)=>{
+          const html = `<b>${it.label}</b>${it.value} — ${formatPct(pct)}`
+          showTip(e.clientX, e.clientY, html)
+        })
+        p.addEventListener("mouseleave", hideTip)
+        g.appendChild(p)
+        slices.push({p,it,pct})
+      })
+
+      const hole=document.createElementNS(ns,"circle")
+      hole.setAttribute("cx",cx); hole.setAttribute("cy",cy); hole.setAttribute("r",inner)
+      hole.setAttribute("fill", "color-mix(in oklab, var(--card), transparent 2%)")
+      hole.setAttribute("stroke","var(--line)")
+      g.appendChild(hole)
+
+      if(opts && opts.centerText){
+        const t=document.createElementNS(ns,"text")
+        t.setAttribute("x",cx); t.setAttribute("y",cy+5)
+        t.setAttribute("text-anchor","middle")
+        t.setAttribute("fill","color-mix(in oklab, var(--text), transparent 8%)")
+        t.setAttribute("font-size","12")
+        t.setAttribute("font-weight","900")
+        t.textContent = opts.centerText
+        g.appendChild(t)
+      }
+
+      svg.appendChild(g)
+
+      slices.forEach((s, idx)=>{
+        const row=document.createElement("div")
+        row.className="lrow"
+        row.setAttribute("role","button")
+        row.setAttribute("tabindex","0")
+        row.setAttribute("aria-pressed","true")
+
+        row.innerHTML = `
+          <div class=lleft>
+            <span class=dot style="background:${palette[idx % palette.length]}"></span>
+            ${escapeHtml(s.it.label)}
+          </div>
+          <div class=lright><b>${s.it.value}</b> — ${formatPct(s.pct)}</div>
+        `
+
+        function toggle(){
+          state[idx] = !state[idx]
+          row.setAttribute("aria-pressed", String(state[idx]))
+          s.p.setAttribute("display", state[idx] ? "" : "none")
+          s.p.setAttribute("opacity", state[idx] ? "0.95" : "0.2")
+        }
+        row.addEventListener("click", toggle)
+        row.addEventListener("keydown", (e)=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); toggle() } })
+        legend.appendChild(row)
+      })
+    }
+
+    function formatPct(x){
+      const v = Math.round(x*10)/10
+      return (""+v).replace(".",",") + "%"
+    }
+    function escapeHtml(s){
+      return (s||"").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))
+    }
+
+    const data = {
+      regimes:{
+        college:{
+          total:40,
+          items:[
+            {label:"DP", value:29},
+            {label:"Interne", value:10},
+            {label:"Externe", value:1}
+          ],
+          byLevel:[
+            ["Régime","6ème","5ème","4ème","3ème","Total"],
+            ["Externe",0,1,0,0,1],
+            ["DP",6,4,7,12,29],
+            ["Interne",3,3,2,2,10],
+            ["Nombre d’élèves",9,8,9,14,40]
+          ]
+        },
+        ecole:{
+          total:21,
+          items:[
+            {label:"DP", value:16},
+            {label:"Interne", value:3},
+            {label:"Externe", value:2}
+          ],
+          byLevel:[
+            ["Régime","Valeur"],
+            ["Externe",2],
+            ["DP",16],
+            ["Interne",3],
+            ["Nombre d’élèves",21]
+          ]
+        }
+      },
+      notifications:{
+        college:{
+          header:["Notifications","6ème","5ème","4ème","3ème","Total"],
+          rows:[
+            ["S3AS","8 (89%)","8 (100%)","8 (89%)","10 (71%)","34 (85%)"],
+            ["Aide humaine","6 (67%)","2 (25%)","3 (33%)","7 (50%)","18 (45%)"],
+            ["ULIS","3 (33%)","1 (13%)","2 (22%)","6 (43%)","12 (30%)"],
+            ["SESSAD (autre que DV)","0 (0%)","0 (0%)","0 (0%)","2 (14%)","2 (5%)"],
+            ["Établissement Spé","0 (0%)","0 (0%)","0 (0%)","1 (7%)","1 (3%)"]
+          ]
+        },
+        ecole:{
+          header:["Notifications","Valeur"],
+          rows:[
+            ["S3AS","21 (100%)"],
+            ["Aide humaine","12 (57%)"],
+            ["SESSAD","1 (5%)"],
+            ["Établissement Spé","2 (10%)"]
+          ]
+        }
+      },
+      aideHumaineNature:{
+        college:{ hours:"188", items:[
+          {label:"Accès aux activités d’apprentissages", value:56},
+          {label:"Actes de la vie quotidienne", value:33},
+          {label:"Activités de la vie sociale et relationnelle", value:11}
+        ]},
+        ecole:{ hours:"138,5", items:[
+          {label:"Accès aux activités d’apprentissages", value:38},
+          {label:"Actes de la vie quotidienne", value:30},
+          {label:"Activités de la vie sociale et relationnelle", value:31}
+        ]}
+      },
+      mpa:{
+        college:{
+          total:40,
+          items:[
+            {label:"Ordinateur adapté", value:16},
+            {label:"Braille numérique", value:10},
+            {label:"Documents papier agrandis", value:7},
+            {label:"Braille papier", value:7}
+          ],
+          byLevel:[
+            ["MPA au collège","6ème","5ème","4ème","3èmeA","3èmeB","Total"],
+            ["Documents papier agrandis",2,0,3,0,2,7],
+            ["Ordinateur adapté",3,4,5,2,2,16],
+            ["MPA en cours d’évaluation",0,0,0,0,0,0],
+            ["Braille papier",3,1,1,1,1,7],
+            ["Braille numérique",1,3,0,4,2,10],
+            ["Total",9,8,9,7,7,40]
+          ]
+        },
+        ecole:{
+          total:20,
+          items:[
+            {label:"Documents papier agrandis", value:8},
+            {label:"Braille papier", value:7},
+            {label:"Ordinateur adapté", value:5}
+          ],
+          byLevel:[
+            ["MPA à l’école","Valeur"],
+            ["Documents papier agrandis",8],
+            ["Ordinateur adapté",5],
+            ["Braille papier",7]
+          ]
+        }
+      }
+    }
+
+    function renderTable(container, grid){
+      const tbl=document.createElement("table")
+      const thead=document.createElement("thead")
+      const trh=document.createElement("tr")
+      grid[0].forEach(h=>{
+        const th=document.createElement("th")
+        th.textContent = h
+        trh.appendChild(th)
+      })
+      thead.appendChild(trh)
+      tbl.appendChild(thead)
+
+      const tb=document.createElement("tbody")
+      grid.slice(1).forEach(r=>{
+        const tr=document.createElement("tr")
+        r.forEach((c,idx)=>{
+          const td=document.createElement("td")
+          td.textContent = c
+          tr.appendChild(td)
+        })
+        tb.appendChild(tr)
+      })
+      tbl.appendChild(tb)
+
+      container.innerHTML=""
+      container.appendChild(tbl)
+    }
+
+    function renderTable2(container, header, rows){
+      const tbl=document.createElement("table")
+      const thead=document.createElement("thead")
+      const trh=document.createElement("tr")
+      header.forEach(h=>{
+        const th=document.createElement("th")
+        th.textContent = h
+        trh.appendChild(th)
+      })
+      thead.appendChild(trh)
+      tbl.appendChild(thead)
+
+      const tb=document.createElement("tbody")
+      rows.forEach(r=>{
+        const tr=document.createElement("tr")
+        r.forEach((c,idx)=>{
+          const td=document.createElement("td")
+          td.textContent = c
+          tr.appendChild(td)
+        })
+        tb.appendChild(tr)
+      })
+      tbl.appendChild(tb)
+
+      container.innerHTML=""
+      container.appendChild(tbl)
+    }
+
+    function renderKpis(container, list){
+      container.innerHTML=""
+      list.forEach(k=>{
+        const d=document.createElement("div")
+        d.className="kpi"
+        d.innerHTML = `<div class=label>${escapeHtml(k.label)}</div><div class=value>${escapeHtml(k.value)}</div><div class=hint>${escapeHtml(k.hint||"")}</div>`
+        container.appendChild(d)
+      })
+    }
+
+    const svgReg=document.getElementById("svgReg")
+    const legReg=document.getElementById("legReg")
+    const tblReg=document.getElementById("tblReg")
+    const kpiReg=document.getElementById("kpiReg")
+
+    const tblNot=document.getElementById("tblNot")
+
+    const svgAh=document.getElementById("svgAh")
+    const legAh=document.getElementById("legAh")
+    const kpiAh=document.getElementById("kpiAh")
+
+    const svgMpa=document.getElementById("svgMpa")
+    const legMpa=document.getElementById("legMpa")
+    const tblMpa=document.getElementById("tblMpa")
+
+    // Valeurs par défaut
+    let modeReg="college"
+    let modeNot="college"
+    let modeAh="college"
+    let modeMpa="college"
+
+    function paintReg(){
+      const d=data.regimes[modeReg]
+      makeDonut(svgReg, legReg, d.items, {centerText: d.total+" élèves"})
+      renderTable(tblReg, d.byLevel)
+      const dp = d.items.find(x=>x.label==="DP")?.value ?? 0
+      const inter = d.items.find(x=>x.label==="Interne")?.value ?? 0
+      const ext = d.items.find(x=>x.label==="Externe")?.value ?? 0
+      renderKpis(kpiReg, [
+        {label:"Total", value: d.total, hint:"effectif"},
+        {label:"DP", value: dp, hint:"demi-pension"},
+        {label:"Interne + Externe", value: (inter+ext), hint:"autres régimes"}
+      ])
+    }
+
+    function paintNot(){
+      const d=data.notifications[modeNot]
+      renderTable2(tblNot, d.header, d.rows)
+    }
+
+    function paintAh(){
+      const d=data.aideHumaineNature[modeAh]
+      makeDonut(svgAh, legAh, d.items, {centerText: d.hours+" h"})
+      renderKpis(kpiAh, [
+        {label:"Total heures", value: d.hours, hint:"figure source"},
+        {label:"Public", value: (modeAh==="college" ? "Collégiens" : "Écoliers"), hint:""},
+        {label:"Lecture", value: "répartition en %", hint:"par nature de notification"}
+      ])
+    }
+
+    function paintMpa(){
+      const d=data.mpa[modeMpa]
+      makeDonut(svgMpa, legMpa, d.items, {centerText: d.total+" élèves"})
+      renderTable(tblMpa, d.byLevel)
+    }
+
+    function setTab(elOn, elOff){
+      elOn.setAttribute("aria-selected","true")
+      elOff.setAttribute("aria-selected","false")
+    }
+
+    function wireTabs(a,b, onA, onB){
+      function actA(){ setTab(a,b); onA() }
+      function actB(){ setTab(b,a); onB() }
+      a.addEventListener("click", actA)
+      b.addEventListener("click", actB)
+      a.addEventListener("keydown", e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); actA() } })
+      b.addEventListener("keydown", e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); actB() } })
+    }
+
+    wireTabs(
+      document.getElementById("tabRegCollege"),
+      document.getElementById("tabRegEcole"),
+      ()=>{ modeReg="college"; paintReg() },
+      ()=>{ modeReg="ecole"; paintReg() }
+    )
+
+    wireTabs(
+      document.getElementById("tabNotCollege"),
+      document.getElementById("tabNotEcole"),
+      ()=>{ modeNot="college"; paintNot() },
+      ()=>{ modeNot="ecole"; paintNot() }
+    )
+
+    wireTabs(
+      document.getElementById("tabAhCollege"),
+      document.getElementById("tabAhEcole"),
+      ()=>{ modeAh="college"; paintAh() },
+      ()=>{ modeAh="ecole"; paintAh() }
+    )
+
+    wireTabs(
+      document.getElementById("tabMpaCollege"),
+      document.getElementById("tabMpaEcole"),
+      ()=>{ modeMpa="college"; paintMpa() },
+      ()=>{ modeMpa="ecole"; paintMpa() }
+    )
+
+    // Initialisation SÉCURISÉE (attente que la page soit prête)
+    document.addEventListener("DOMContentLoaded", function() {
+      // Force l'affichage du contenu par défaut
+      paintReg();
+      paintNot();
+      paintAh();
+      paintMpa();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,775 @@
+<!doctype html>
+<html lang=fr>
+<head>
+  <meta charset=utf-8>
+  <meta name=viewport content="width=device-width,initial-scale=1">
+  <title>Axe 4 — Identité EREA & établissement ressource</title>
+  <meta name=color-scheme content="light dark">
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card:#101a2f;
+      --muted:#9fb0d0;
+      --text:#eaf0ff;
+      --line:rgba(255,255,255,.10);
+      --accent:#6ee7ff;
+      --shadow: 0 18px 55px rgba(0,0,0,.35);
+      --radius:20px;
+      /* Couleurs poles */
+      --on-bg: rgba(52,211,153,.15);
+      --on-txt: #34d399;
+    }
+    @media (prefers-color-scheme: light){
+      :root{
+        --bg:#f5f7ff;
+        --card:#ffffff;
+        --muted:#53627a;
+        --text:#0b1220;
+        --line:rgba(0,0,0,.10);
+        --shadow: 0 18px 55px rgba(30,41,59,.14);
+        --on-bg: rgba(16,185,129,.12);
+        --on-txt: #059669;
+      }
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(1200px 800px at 10% 0%, rgba(110,231,255,.16), transparent 60%),
+        radial-gradient(900px 700px at 100% 10%, rgba(167,139,250,.14), transparent 55%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.55;
+    }
+    a{color:inherit; text-decoration:none}
+    .wrap{max-width:1100px; margin:0 auto; padding:22px 16px 56px}
+    
+    .topbar{
+      display:flex; gap:12px; align-items:center; justify-content:space-between;
+      padding:14px 14px;
+      background: color-mix(in oklab, var(--card), transparent 10%);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      position: sticky; top:12px; z-index:10;
+      backdrop-filter: blur(10px);
+    }
+    
+    .brand{display:flex; gap:12px; align-items:center; min-width: 240px;}
+    .logo{
+      width:44px; height:44px; border-radius:14px; overflow:hidden;
+      border:1px solid var(--line);
+      background:linear-gradient(135deg, rgba(110,231,255,.22), rgba(167,139,250,.18));
+      display:grid; place-items:center;
+    }
+    .logo img{width:100%; height:100%; object-fit:cover}
+
+    .brand h1{font-size:16px; margin:0}
+    .brand p{margin:2px 0 0; font-size:12px; color:var(--muted)}
+    
+    .nav{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end}
+    .pill{
+      padding:10px 12px; border-radius:999px;
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 12%);
+      font-size:13px;
+    }
+    .pill:hover{transform: translateY(-1px)}
+    @media (max-width: 920px){
+      .topbar{flex-direction:column; align-items:stretch}
+      .nav{justify-content:flex-start}
+    }
+
+    /* HERO CENTRÉ */
+    .hero{
+      margin-top:18px;
+      padding:40px 18px;
+      border-radius: calc(var(--radius) + 6px);
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, color-mix(in oklab, var(--card), transparent 6%), color-mix(in oklab, var(--card), transparent 14%));
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+      text-align: center;
+    }
+    .hero:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(700px 260px at 12% 0%, rgba(110,231,255,.18), transparent 62%),
+        radial-gradient(600px 260px at 88% 0%, rgba(52,211,153,.14), transparent 62%);
+      pointer-events:none;
+    }
+    .hero > *{position:relative}
+    .hero h2{margin:0; font-size:28px; line-height: 1.3;}
+    
+    .axe-label{
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 8px;
+        background: color-mix(in oklab, var(--accent), transparent 85%);
+        color: var(--accent);
+        font-weight: 900;
+        font-size: 14px;
+        margin-bottom: 12px;
+        border: 1px solid color-mix(in oklab, var(--accent), transparent 70%);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 260px;
+      gap:14px;
+      margin-top:14px;
+    }
+    @media (max-width:900px){.grid{grid-template-columns:1fr}}
+
+    .card{
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 6%);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:16px;
+      overflow:hidden;
+    }
+    .card h3{margin:0 0 10px; font-size:16px}
+    .muted{color:var(--muted)}
+    .sub{font-size:12px; color:var(--muted); margin-top:6px}
+
+    /* Navigation Repères */
+    .axes{display:grid; gap:8px; margin-top: 10px;}
+    .ax{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+      background:color-mix(in oklab, var(--card), transparent 10%);
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background 0.2s, transform 0.2s;
+      font-size: 13px;
+    }
+    .ax b{display:block; font-size: 14px; margin-bottom: 2px;}
+    
+    /* Axe Actif */
+    .ax.active {
+        border: 1px solid var(--accent);
+        background: linear-gradient(90deg, color-mix(in oklab, var(--accent), transparent 85%), transparent);
+        cursor: default;
+        position: relative;
+        padding-left: 16px;
+    }
+    .ax.active::after {
+        content: "➔"; color: var(--accent); font-weight: 900; margin-left: 10px; font-size: 18px;
+    }
+    
+    /* Liens Axes */
+    a.ax:hover {
+        background: color-mix(in oklab, var(--card), transparent 18%);
+        transform: translateX(4px);
+    }
+
+    /* Contenu */
+    details{
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:color-mix(in oklab, var(--card), transparent 10%);
+      overflow:hidden;
+      margin-top:12px;
+    }
+    summary{
+      cursor:pointer;
+      list-style:none;
+      padding:16px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      font-weight:900;
+      font-size: 15px;
+    }
+    summary::-webkit-details-marker{display:none}
+    .body{padding:0 16px 16px}
+
+    .obj{
+      margin-top:20px;
+      margin-bottom: 10px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid var(--line);
+    }
+    .obj .t{
+        font-weight:900; 
+        color:var(--text);
+        text-transform: uppercase;
+        font-size: 12px;
+        letter-spacing: 1px;
+        opacity: 0.7;
+    }
+    .obj .s{color:var(--text); font-size:15px; margin-top:4px; font-weight:700}
+
+    .act{
+      margin-top:10px;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:14px;
+      background:color-mix(in oklab, var(--card), transparent 6%);
+    }
+    .act .row{display:grid; grid-template-columns: 1fr 140px; gap:20px}
+    @media (max-width: 600px){ .act .row{grid-template-columns:1fr} }
+    
+    .act .txt b{display:block; font-size:14px; line-height: 1.4}
+    .act .txt p{margin:4px 0 0; color:var(--muted); font-size:13px}
+    
+    .pole-col { text-align: right; }
+    @media (max-width: 600px){ .pole-col { text-align: left; margin-top: 8px; } }
+
+    .pole-lbl { font-size: 10px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; font-weight: 700; }
+    .poles{display:flex; gap:4px; flex-wrap:wrap; justify-content:flex-end}
+    @media (max-width: 600px){ .poles { justify-content: flex-start; } }
+
+    .pole{
+      padding:4px 8px;
+      border-radius:6px;
+      border:1px solid var(--line);
+      background:color-mix(in oklab, var(--card), transparent 16%);
+      font-size:11px;
+      color:var(--muted);
+      font-weight:700;
+    }
+    .pole.on{color:var(--on-txt); background:var(--on-bg); border-color:var(--on-txt)}
+    .pole.off{opacity:0.2;}
+
+    .foot{
+      margin-top:18px;
+      padding:12px 16px;
+      border-top:1px solid rgba(0,0,0,.08);
+      color:#6b7280;
+      font-size:12px;
+      text-align:center;
+    }
+
+    @media print{
+      .topbar{position:static; box-shadow:none}
+      body{background:#fff}
+      .card,.hero,.topbar,details{box-shadow:none}
+    }
+  </style>
+</head>
+
+<body>
+  <div class=wrap>
+    <header class=topbar>
+      <a href="index.html" class=brand>
+        <div class="logo">
+           <img src="logo-csrp.png" alt="">
+        </div>
+        <div>
+          <h1>Projet d’établissement</h1>
+          <p>Axe 4</p>
+        </div>
+      </a>
+
+      <nav class=nav aria-label=Navigation>
+  <a class=pill href=index.html>Accueil</a>   <a class=pill href=01-sommaire.html>Sommaire</a>
+</nav>
+    </header>
+
+    <section class=hero>
+      <div class=axe-label>AXE 4</div>
+      <h2>Affirmer l’identité singulière de l’EREA et devenir un établissement ressource en matière d’école inclusive</h2>
+    </section>
+
+    <div class=grid>
+      
+      <div id="content">
+        
+        <section class=card>
+          <h3>Orientation 1</h3>
+          <div class=muted>Faire vivre le collectif au sein de la CSRP</div>
+
+          <details>
+            <summary>Objectifs et actions envisagées pour 2026-2030 <span>▼</span></summary>
+            <div class=body>
+              
+              <div class=obj>
+                <div class=t>Objectif 1</div>
+                <div class=s>Valoriser les identités professionnelles et renforcer la culture de l’intermétiers</div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>Organiser des temps de valorisation des productions matérielles et immatérielles</b>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole on">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole on">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>Créer des projets inter-filières et/ou inter-cycles</b>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole on">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole off">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>Favoriser des espace-temps inter-métiers conviviaux</b>
+                    <p>Café de rentrée, café collab’</p>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole on">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole on">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=obj>
+                <div class=t>Objectif 2</div>
+                <div class=s>Développer le travail collaboratif et la co-construction de projets</div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>Répertorier régulièrement les besoins des équipes pour la planification des temps de concertation et de collaboration</b>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole on">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole off">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>Développer les temps de concertation</b>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole on">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole off">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>Développer les espaces collaboratifs numériques</b>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole on">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole off">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=obj>
+                <div class=t>Objectif 3</div>
+                <div class=s>Favoriser une communication interne fluide, bienveillante et efficace</div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>Mettre en place une formation sur la communication consciente et efficace</b>
+                    <p>Pour tout le personnel (l'agir communicationnel)</p>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole on">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole on">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>Développer une culture commune autour de la bienveillance</b>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole on">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole on">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>S'outiller d'une équipe ressource</b>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole on">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole on">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </details>
+        </section>
+
+        <section class=card style="margin-top:14px">
+          <h3>Orientation 2</h3>
+          <div class=muted>Affirmer notre expertise dans la scolarisation et l'insertion des élèves à besoins éducatifs particuliers</div>
+
+          <details>
+            <summary>Objectifs et actions envisagées pour 2026-2030 <span>▼</span></summary>
+            <div class=body>
+              <div class=obj>
+                <div class=t>Objectif 1</div>
+                <div class=s>Ouvrir la cité scolaire sur son environnement et faire connaître son savoir-faire</div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>Structurer, clarifier et systématiser les actions et les outils de communication</b>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole on">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole on">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>Élaborer un plan de communication externe avec des outils actualisés</b>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole on">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole off">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>Faire connaître nos offres de formation et nos spécificités</b>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole on">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole off">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=obj>
+                <div class=t>Objectif 2</div>
+                <div class=s>Garantir un partenariat actif avec le monde de l'entreprise et les organismes d'insertion</div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>Développer les partenariats avec le monde de l'entreprise</b>
+                    <p>Mentorat, visite d'entreprises, témoignages de professionnels</p>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole off">École</span>
+                      <span class="pole off">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole off">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>Maintenir les partenariats avec les structures soutenant l'insertion des personnes en situation de handicap</b>
+                    <p>Arpejh, ESAT...</p>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole off">École</span>
+                      <span class="pole off">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole off">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=obj>
+                <div class=t>Objectif 3</div>
+                <div class=s>Diffuser les pratiques pédagogiques innovantes et inclusives développées au sein de l'établissement</div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>Partager la culture et les connaissances relatives aux EBEP et au handicap</b>
+                    <p>Capitaliser notre expertise, s'engager dans le Lab'Inclusif de Canopé</p>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole on">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole on">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>Communiquer sur les pratiques culturelles et sportives</b>
+                    <p>Projet DAAC, activités Handisport</p>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole on">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole on">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </details>
+        </section>
+
+        <section class=card style="margin-top:14px">
+          <h3>Orientation 3</h3>
+          <div class=muted>Devenir un établissement "ressources" et précurseur en matière d'école inclusive</div>
+
+          <details>
+            <summary>Objectifs et actions envisagées pour 2026-2030 <span>▼</span></summary>
+            <div class=body>
+              <div class=obj>
+                <div class=t>Objectif 1</div>
+                <div class=s>Consolider et développer les partenariats avec le secteur médico-social</div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>Créer des temps de collaboration réguliers entre partenaires</b>
+                    <p>Hors réunions institutionnelles (SESSAD, ESAT, ESRP, MDPH...)</p>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole on">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole off">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>Partager de savoir-faire matériels et immatériels entre partenaires</b>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole on">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole on">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=obj>
+                <div class=t>Objectif 2</div>
+                <div class=s>Renforcer les collaborations avec l'université, l'INSEI et l'EAFC</div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>Faire de la CSRP un lieu d'études : recherches, formations pour l'accompagnement des élèves à besoins éducatifs particuliers</b>
+                    <p>Accueil de stagiaires, immersion professionnelle, recherches-actions</p>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole on">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole on">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>Collaborer à des projets de formations institutionnelles ou universitaires autour de l'Ecole Inclusive</b>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole on">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole off">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=obj>
+                <div class=t>Objectif 3</div>
+                <div class=s>Encourager les expérimentations pédagogiques et le partage d'expériences</div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>Valoriser les choix d'établissement et pédagogiques forts pour les identifier comme innovants</b>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole on">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole off">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=act>
+                <div class=row>
+                  <div class=txt>
+                    <b>Maintenir les dispositifs expérimentaux</b>
+                  </div>
+                  <div class=pole-col>
+                    <div class=pole-lbl>Pôles concernés</div>
+                    <div class=poles>
+                      <span class="pole on">École</span>
+                      <span class="pole on">Collège</span>
+                      <span class="pole on">Lycée</span>
+                      <span class="pole off">Internat</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </details>
+        </section>
+
+      </div>
+
+      <div class=card style="height:fit-content">
+        <h3>Repères</h3>
+        <div class=sub>Navigation rapide entre les axes</div>
+        <div class=axes>
+          <a href="09-axe1.html" class="ax">
+            <div><b>Axe 1</b><span>Parcours personnalisé</span></div>
+          </a>
+          <a href="10-axe2.html" class="ax">
+            <div><b>Axe 2</b><span>Accessibilité</span></div>
+          </a>
+          <a href="11-axe3.html" class="ax">
+            <div><b>Axe 3</b><span>Bien-être</span></div>
+          </a>
+          
+          <div class="ax active">
+            <div><b>Axe 4</b><span>Identité EREA</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <footer class=foot>
+      <div>Projet d’établissement 2026-2030 — Cité scolaire René Pellet</div>
+    </footer>
+  </div>
+
+  <script>
+    ;(function(){
+      try{ localStorage.setItem('pe_last_file', (location.pathname.split('/').pop() || '12-axe4.html')) }catch(e){}
+    })()
+  </script>
+</body>
+</html>

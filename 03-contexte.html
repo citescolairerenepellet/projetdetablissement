@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang=fr>
+<head>
+  <meta charset=utf-8>
+  <meta name=viewport content="width=device-width,initial-scale=1">
+  <title>Éléments de contexte — Projet d’établissement 2026-2030</title>
+  <meta name=color-scheme content="light dark">
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card:#101a2f;
+      --muted:#9fb0d0;
+      --text:#eaf0ff;
+      --line:rgba(255,255,255,.10);
+      --accent:#6ee7ff;
+      --accent2:#a78bfa;
+      --accent3:#34d399;
+      --shadow: 0 18px 55px rgba(0,0,0,.35);
+      --radius:20px;
+    }
+    @media (prefers-color-scheme: light){
+      :root{
+        --bg:#f5f7ff;
+        --card:#ffffff;
+        --muted:#53627a;
+        --text:#0b1220;
+        --line:rgba(0,0,0,.10);
+        --shadow: 0 18px 55px rgba(30,41,59,.14);
+      }
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(1200px 800px at 10% 0%, rgba(110,231,255,.16), transparent 60%),
+        radial-gradient(900px 700px at 100% 10%, rgba(167,139,250,.14), transparent 55%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.55;
+    }
+    a{color:inherit; text-decoration:none}
+    .wrap{max-width:1100px; margin:0 auto; padding:22px 16px 56px}
+    
+    .topbar{
+      display:flex; gap:12px; align-items:center; justify-content:space-between;
+      padding:14px 14px;
+      background: color-mix(in oklab, var(--card), transparent 10%);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      position: sticky; top:12px; z-index:10;
+      backdrop-filter: blur(10px);
+    }
+    
+    .brand{display:flex; gap:12px; align-items:center; min-width: 240px;}
+    .logo{
+      width:44px; height:44px; border-radius:14px; overflow:hidden;
+      border:1px solid var(--line);
+      background:linear-gradient(135deg, rgba(110,231,255,.22), rgba(167,139,250,.18));
+      display:grid; place-items:center;
+    }
+    .logo img{width:100%; height:100%; object-fit:cover}
+
+    .brand h1{font-size:16px; margin:0}
+    .brand p{margin:2px 0 0; font-size:12px; color:var(--muted)}
+    
+    .nav{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end}
+    .pill{
+      padding:10px 12px; border-radius:999px;
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 12%);
+      font-size:13px;
+    }
+    .pill:hover{transform: translateY(-1px)}
+    @media (max-width: 920px){
+      .topbar{flex-direction:column; align-items:stretch}
+      .nav{justify-content:flex-start}
+    }
+
+    .hero{
+      margin-top:18px;
+      padding:22px 18px;
+      border-radius: calc(var(--radius) + 6px);
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, color-mix(in oklab, var(--card), transparent 6%), color-mix(in oklab, var(--card), transparent 14%));
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+      text-align: center;
+    }
+    .hero:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(700px 260px at 12% 0%, rgba(110,231,255,.18), transparent 62%),
+        radial-gradient(600px 260px at 88% 0%, rgba(52,211,153,.12), transparent 62%);
+      pointer-events:none;
+    }
+    .hero > *{position:relative}
+    .hero h2{margin:0; font-size:28px}
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap:14px;
+      margin-top:14px;
+    }
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
+    }
+
+    .card{
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 6%);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:16px;
+    }
+    .card h3{margin:0 0 10px; font-size:16px}
+    .muted{color:var(--muted)}
+
+    .kpis{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:10px;
+    }
+    @media (max-width: 760px){
+      .kpis{grid-template-columns:1fr}
+    }
+    .kpi{
+      padding:12px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 10%);
+    }
+    .kpi .label{font-size:12px; color:var(--muted)}
+    .kpi .value{font-size:20px; font-weight:900; margin-top:2px}
+    .kpi .hint{font-size:12px; color:var(--muted); margin-top:4px}
+
+    /* Style timeline */
+    .timeline{display:grid; gap:10px; margin-top:10px}
+    .tItem{
+      padding:12px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 12%);
+      display:grid; gap:6px;
+    }
+    .tItem b{font-size:13px}
+    .tItem p{margin:0; color:var(--muted); font-size:13px}
+
+    .pillRow{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
+    .chip{
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 14%);
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    /* Style Texte Intégral */
+    details{
+      border:1px solid var(--line);
+      border-radius:18px;
+      background: color-mix(in oklab, var(--card), transparent 10%);
+      overflow:hidden;
+      margin-top:10px;
+    }
+    summary{
+      cursor:pointer;
+      list-style:none;
+      padding:14px 16px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      font-weight:900;
+      color: var(--text);
+    }
+    summary::-webkit-details-marker{display:none}
+    .chev{
+      width:24px;height:24px;flex:0 0 24px;
+      display:grid;place-items:center;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.1);
+      font-size:12px;
+      transition:transform .18s ease;
+      color:var(--text);
+    }
+    details[open] .chev{transform:rotate(180deg)}
+    
+    .body{padding: 0 16px 16px; font-size:14px; color:var(--muted); text-align:justify; line-height:1.6}
+    .body p { margin: 0 0 12px; }
+    .body p:last-child { margin: 0; }
+
+    .foot{
+      margin-top:18px;
+      padding:12px 16px;
+      border-top:1px solid rgba(0,0,0,.08);
+      color:#6b7280;
+      font-size:12px;
+      text-align:center;
+    }
+
+    @media print{
+      .topbar{position:static; box-shadow:none}
+      body{background:#fff}
+      .card,.hero,.topbar,details{box-shadow:none}
+    }
+  </style>
+</head>
+
+<body>
+  <div class=wrap>
+    <header class=topbar>
+      <a href="index.html" class=brand>
+        <div class="logo">
+           <img src="logo-csrp.png" alt="">
+        </div>
+        <div>
+          <h1>Projet d’établissement</h1>
+          <p>Éléments de contexte</p>
+        </div>
+      </a>
+
+      <nav class=nav aria-label=Navigation>
+  <a class=pill href=index.html>Accueil</a>   <a class=pill href=01-sommaire.html>Sommaire</a>
+</nav>
+    </header>
+
+    <section class=hero>
+      <h2>Éléments de contexte de la Cité Scolaire René Pellet</h2>
+    </section>
+
+    <section class=grid>
+      <div class=card>
+        <h3>Repères historiques</h3>
+
+        <div class=timeline>
+          <div class=tItem>
+            <b>Début XXème siècle</b>
+            <p>École pour élèves déficients visuels, avec évolutions pédagogiques et éducatives liées à l’évolution de l’École en France.</p>
+          </div>
+
+          <div class=tItem>
+            <b>Années 80</b>
+            <p>Organisation actuelle. En 1983, installation dans des locaux neufs au 32 rue de France à Villeurbanne.</p>
+          </div>
+
+          <div class=tItem>
+            <b>1985</b>
+            <p>Devient Établissement Régional d’Enseignement Adapté à la Déficience Visuelle (EREADV).</p>
+          </div>
+
+          <div class=tItem>
+            <b>Aujourd’hui</b>
+            <p>Organisation pédagogique et éducative toujours en place. Deux organisations scolaires de ce type sur le territoire national.</p>
+          </div>
+        </div>
+
+        <div class=pillRow>
+          <span class=chip>École élémentaire</span>
+          <span class=chip>Collège</span>
+          <span class=chip>Lycée professionnel</span>
+          <span class=chip>Internat éducatif</span>
+          <span class=chip>Pôle médico-social</span>
+        </div>
+      </div>
+
+      <div class=card>
+        <h3>Chiffres clés et dispositifs</h3>
+
+        <div class=kpis>
+          <div class=kpi>
+            <div class=label>Élèves scolarisés</div>
+            <div class=value>217</div>
+            <div class=hint>répartis sur 3 structures</div>
+          </div>
+          <div class=kpi>
+            <div class=label>En situation de handicap</div>
+            <div class=value>139</div>
+            <div class=hint>soit 68% de la population</div>
+          </div>
+          <div class=kpi>
+            <div class=label>Équipe pédagogique</div>
+            <div class=value>61 enseignants</div>
+            <div class=hint>65% titulaires CAPA-SH / CAPPEI</div>
+          </div>
+        </div>
+
+        <div class=timeline style="margin-top:20px">
+            <div class=tItem>
+            <b>Locaux & Accessibilité</b>
+            <p>Complexe sur 30 ha calme et arboré. Bâtiments des années 80. Pas d'accès PMR complet (projets de restructuration à l'étude).</p>
+            </div>
+            <div class=tItem>
+            <b>Population fragile</b>
+            <p>61,4% d’élèves boursiers et un indice de position sociale des familles de 84.</p>
+            </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid" style="grid-template-columns: 1fr;">
+        <details>
+            <summary>
+                Lire l'analyse contextuelle complète
+                <span class="chev">▼</span>
+            </summary>
+            <div class="body">
+                <p>La Cité Scolaire René Pellet est historiquement une école pour élèves déficients visuels qui a connu de nombreuses évolutions pédagogiques et éducatives en lien avec l’évolution de l’École en France depuis le début du XXème siècle.</p>
+                <p>Son organisation actuelle remonte aux années 80 : en 1983, l’établissement s’est installé dans des locaux neufs au 32 rue de France à Villeurbanne. Il comptait plusieurs structures pédagogiques dédiées à un public scolaire déficient visuel : une école primaire, un collège et des classes techniques de type lycée professionnel ainsi qu’une école de massage. L’établissement abritait également un internat éducatif ouvert sept jours sur sept hors vacances scolaires et un pôle médico-social. En 1985, l’établissement est devenu un Établissement Régional d’Enseignement Adapté à la Déficience Visuelle (EREADV). Cette nouvelle organisation pédagogique et éducative est toujours celle de l’établissement actuellement. Il existe seulement deux organisations scolaires de ce type sur le territoire national.</p>
+                <p>Actuellement, la Cité Scolaire René Pellet – EREA-DV scolarise 217 élèves, répartis sur 3 structures : l’école élémentaire, le collège et le lycée professionnel. Parmi ces élèves, 139 élèves, soit 68% de la population scolaire, sont en situation de handicap et bénéficient de droits à la compensation. Quatre dispositifs ULIS sont implantés dans l’établissement : une ULIS TFC au collège, deux ULIS TFC et une ULIS TSA au lycée. La CSRP est considérée comme PIAL regroupant 35 AESH, tous en poste à la CSRP. L’établissement héberge aussi un service médico-social (S3AS) affilié aux PEP69 qui accompagne les élèves déficients visuels. En parallèle, l’établissement recense une dizaine de partenariats réguliers avec d’autres structures médico-sociales type SESSAD ou ESAT pour soutenir la scolarité, favoriser l’accessibilité aux apprentissages et l’insertion sociale et professionnelle.</p>
+                <p>L’équipe pédagogique compte 61 enseignants ; 65% sont titulaires soit du CAPA-SH ou soit du CAPPEI. Deux professeurs des écoles spécialisés sont chargés de l’enseignement du braille et du braille numérique. Un professeur des écoles spécialisé est délégué au suivi et à la maîtrise du matériel informatique adapté à la déficience visuelle. La communauté éducative est volontaire et positive, les équipes sont stables.</p>
+                <p>La population scolaire est fragile ; les indicateurs socio-économiques en attestent avec 61.4 % d’élèves boursiers et un indice de position sociale des familles de 84.</p>
+                <p>L’ensemble des locaux forme un complexe scolaire implanté dans le centre de Villeurbanne à proximité du Métro Flachet sur un espace de 30 ha calme et arboré. Ils datent tous des années 80. Ils ont bénéficié d’une réhabilitation énergétique extérieure en 2017 mais n’ont pas d’accès PMR et sont peu équipés pour l’accessibilité des personnes en situation de handicap. Plusieurs projets de restructuration sont à l’étude par la Région : la restructuration du bâtiment de la demi-pension, la restructuration du bâtiment de loge et des accès de l’établissement et l’accès PMR des bâtiments. L’entretien de l’établissement est assuré par une équipe de 20 agents de la Région.</p>
+                <p>La situation financière de la CSRP est à l’équilibre grâce à un fonds de roulement important constitué par des dons de Villeurbannais mais pourrait être fragilisée les prochaines années si l’explosion des frais de viabilisation devait perdurer.</p>
+                <p>Le projet d’établissement, obsolète depuis plusieurs années, a peu orienté les choix réalisés ces dernières années. Le contrat d’objectifs (2018-2022) et la démarche pour la labellisation de l’établissement comme « lycée des métiers » obtenue en 2023 ont davantage orienté les choix pédagogiques et éducatifs de l’établissement ces dernières années. L’écriture d’un nouveau projet devrait finaliser la démarche d’autoévaluation et d’évaluation externe de l’établissement.</p>
+            </div>
+        </details>
+    </section>
+
+    <footer class=foot>
+      <div>Projet d’établissement 2026-2030 — Cité scolaire René Pellet</div>
+    </footer>
+  </div>
+
+  <script>
+    ;(function(){
+      try{
+        localStorage.setItem("pe_last_file", (location.pathname.split("/").pop() || "03-contexte.html"))
+      }catch(e){}
+    })()
+  </script>
+</body>
+</html>

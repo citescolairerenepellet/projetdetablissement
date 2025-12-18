@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Conclusion — Projet d’établissement</title>
+  <meta name="color-scheme" content="light dark">
+  <style>
+    :root{
+      --bg:#0b1220; --card:#101a2f; --muted:#9fb0d0; --text:#eaf0ff; --line:rgba(255,255,255,.10);
+      --accent:#6ee7ff; --accent2:#a78bfa; --shadow:0 18px 55px rgba(0,0,0,.35); --radius:20px;
+    }
+    @media (prefers-color-scheme: light){
+      :root{--bg:#f5f7ff; --card:#fff; --muted:#53627a; --text:#0b1220; --line:rgba(0,0,0,.10); --shadow:0 18px 55px rgba(30,41,59,.14);}
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family:ui-sans-serif,system-ui,-apple-system,sans-serif;
+      background:radial-gradient(1200px 800px at 50% 0%, rgba(110,231,255,.12), transparent 60%), var(--bg);
+      color:var(--text); line-height:1.6;
+    }
+    a{color:inherit; text-decoration:none}
+    .wrap{max-width:1000px; margin:0 auto; padding:20px 16px 60px}
+    
+    /* Navigation */
+    .topbar{
+      display:flex; gap:12px; align-items:center; justify-content:space-between;
+      padding:14px; border:1px solid var(--line); border-radius:var(--radius);
+      background:color-mix(in oklab, var(--card), transparent 10%);
+      box-shadow:var(--shadow); position:sticky; top:12px; z-index:10; backdrop-filter:blur(10px);
+    }
+    .brand{display:flex; gap:12px; align-items:center}
+    .logo{
+      width:44px; height:44px; border-radius:14px; overflow:hidden;
+      border:1px solid var(--line); background:linear-gradient(135deg, rgba(110,231,255,.22), rgba(167,139,250,.18));
+      display:grid; place-items:center;
+    }
+    .logo img{width:100%; height:100%; object-fit:cover}
+    .nav{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end}
+    .pill{
+      padding:10px 12px; border-radius:999px; border:1px solid var(--line);
+      background:color-mix(in oklab, var(--card), transparent 12%); font-size:13px;
+    }
+    .pill:hover{transform:translateY(-1px)}
+
+    /* --- NOUVEAU DESIGN VISUEL --- */
+    
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .visual-summary {
+      display: grid; gap: 24px;
+      margin-top: 30px;
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    /* Carte Slogan */
+    .slogan-card {
+      text-align: center; padding: 40px 20px;
+      background: linear-gradient(135deg, color-mix(in oklab, var(--card), transparent 5%), color-mix(in oklab, var(--card), transparent 15%));
+      border: 1px solid var(--line); border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    
+    /* MODIF : Titre en NOIR (ou couleur texte par défaut) et non bleu */
+    .slogan-card h2 {
+      font-size: 32px; margin: 0 0 12px;
+      color: var(--text); /* Couleur du texte standard (Noir sur fond clair) */
+      font-weight: 800; letter-spacing: -0.5px;
+    }
+    /* MODIF : Sous-titre adouci (plus de bleu flashy) */
+    .slogan-card p { 
+        font-size: 18px; color: var(--muted); margin: 0; 
+        font-weight: 500; font-family: serif; font-style: italic;
+    }
+
+    /* Grille 2x2 parfaite */
+    .highlights {
+      display: grid; 
+      grid-template-columns: 1fr 1fr; /* Force 2 colonnes */
+      gap: 20px;
+    }
+    @media (max-width: 700px){ .highlights{ grid-template-columns: 1fr; } }
+
+    .highlight-card {
+      padding: 30px; 
+      border: 1px solid var(--line); border-radius: var(--radius);
+      background: color-mix(in oklab, var(--card), transparent 30%);
+      transition: transform 0.2s, background 0.2s, border-color 0.2s;
+      
+      /* MODIF : Centrage parfait du contenu */
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+    }
+    .highlight-card:hover {
+      transform: translateY(-4px);
+      background: color-mix(in oklab, var(--card), transparent 10%);
+      border-color: var(--accent);
+    }
+    
+    /* Icônes SVG */
+    .icon-box {
+        width: 56px; height: 56px; margin-bottom: 16px;
+        background: color-mix(in oklab, var(--accent), transparent 85%);
+        color: var(--accent);
+        border-radius: 16px;
+        display: grid; place-items: center;
+    }
+    .icon-box svg { width: 28px; height: 28px; }
+
+    .highlight-title { font-weight: 700; font-size: 18px; color: var(--text); margin-bottom: 8px; }
+    .highlight-desc { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+    /* --- PARTIE TEXTE INTEGRAL (Accordeon) --- */
+    details {
+      margin-top: 40px;
+      border: 1px solid var(--line); border-radius: var(--radius);
+      background: color-mix(in oklab, var(--card), transparent 10%);
+      overflow: hidden;
+    }
+    summary {
+      padding: 18px 24px; cursor: pointer; list-style: none; font-weight: 700;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background 0.2s;
+      text-transform: uppercase; font-size: 13px; letter-spacing: 1px; color: var(--muted);
+    }
+    summary:hover { background: color-mix(in oklab, var(--card), transparent 5%); color: var(--text); }
+    summary::-webkit-details-marker { display: none; }
+    
+    .chev { transition: transform 0.2s; font-size: 12px; opacity: 0.7; }
+    details[open] .chev { transform: rotate(180deg); }
+
+    .full-text {
+      padding: 0 24px 30px;
+      color: var(--text); font-size: 15px; text-align: justify; line-height: 1.8;
+      border-top: 1px solid var(--line);
+    }
+    .full-text p { margin-bottom: 16px; }
+    .full-text p:last-child { margin-bottom: 0; }
+
+    /* Signature */
+    .sig {
+      margin-top: 40px; text-align: right; font-size: 13px; color: var(--muted);
+      border-top: 1px solid var(--line); padding-top: 20px;
+    }
+    .sig b { color: var(--text); display: block; margin-bottom: 4px; }
+
+    .foot{
+      margin-top:40px; padding:12px 16px;
+      border-top:1px solid rgba(0,0,0,.08); color:#6b7280; font-size:12px; text-align:center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    
+    <header class="topbar">
+      <a href="index.html" class="brand">
+        <div class="logo"><img src="logo-csrp.png" alt=""></div>
+        <div>
+          <h1 style="font-size:16px; margin:0">Projet d’établissement</h1>
+          <p style="margin:0; font-size:12px; color:var(--muted)">Conclusion</p>
+        </div>
+      </a>
+      <nav class="nav">
+        <a class="pill" href="index.html">Accueil</a>
+        <a class="pill" href="01-sommaire.html">Sommaire</a>
+      </nav>
+    </header>
+
+    <div class="visual-summary">
+      
+      <div class="slogan-card">
+        <h2>Pour conclure</h2>
+        <p>Une ambition commune pour une école inclusive, bienveillante et exigeante.</p>
+      </div>
+
+      <div class="highlights">
+        
+        <div class="highlight-card">
+          <div class="icon-box">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+          </div>
+          <div class="highlight-title">4 Axes Structurants</div>
+          <div class="highlight-desc">
+            Personnalisation, Accessibilité, Bien-être et Identité forte constituent la trame cohérente et évolutive de notre action.
+          </div>
+        </div>
+
+        <div class="highlight-card">
+          <div class="icon-box">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+          </div>
+          <div class="highlight-title">Innovation & Expertise</div>
+          <div class="highlight-desc">
+            Affirmer notre rôle d'établissement ressource et de référence sur les questions d'éducation inclusive.
+          </div>
+        </div>
+
+        <div class="highlight-card">
+          <div class="icon-box">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+          </div>
+          <div class="highlight-title">Mobilisation Collective</div>
+          <div class="highlight-desc">
+            La réussite repose sur tous : personnels, élèves, familles et partenaires, dans une démarche de confiance.
+          </div>
+        </div>
+
+        <div class="highlight-card">
+          <div class="icon-box">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+          </div>
+          <div class="highlight-title">Pilotage Participatif</div>
+          <div class="highlight-desc">
+            Une démarche d'amélioration continue avec un suivi régulier pour ajuster nos pratiques aux besoins du terrain.
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <details>
+      <summary>
+        Lire la conclusion intégrale
+        <span class="chev">▼</span>
+      </summary>
+      <div class="full-text">
+        <br>
+        <p>Ce projet d’établissement traduit la volonté collective de notre communauté scolaire de construire une école inclusive, bienveillante et exigeante, où chaque élève trouve les conditions de sa réussite et de son épanouissement.</p>
+
+        <p>Fruit d’une réflexion partagée entre les équipes pédagogiques, éducatives et de direction, il affirme des orientations claires autour de quatre axes structurants : la personnalisation des parcours, l’accessibilité des apprentissages, le bien-être de tous, et l’affirmation d’une identité d’établissement ressource.</p>
+
+        <p>En affirmant son identité singulière, la cité scolaire René Pellet – EREA DV entend renforcer son rôle d’acteur de référence sur les questions d’éducation inclusive et d’accompagnement des élèves à besoins particuliers. L’établissement poursuivra sa dynamique d’innovation, d’expérimentation et de partenariat pour anticiper les évolutions de l’École et répondre au mieux aux besoins des jeunes accueillis.</p>
+
+        <p>Ces priorités constituent la trame d’une action cohérente, concertée et évolutive, au service des élèves et de la réussite de chacun.</p>
+
+        <p>Ce projet s’inscrit dans une démarche de pilotage participatif et d’amélioration continue. Les équipes s’engagent à en assurer le suivi et l’évaluation régulière, à ajuster leurs pratiques, et à valoriser les réussites observées. Des instances de concertation permettront d’analyser les avancées et de réorienter les actions en fonction des besoins constatés sur le terrain.</p>
+
+        <p>La réussite de ce projet repose sur la mobilisation de tous : personnels, élèves, familles, partenaires institutionnels. Chacun, à son niveau, contribue à la construction d’un établissement ouvert, scolaire et apprenant.</p>
+
+        <p>Ce projet d’établissement nous engage dans une démarche d’éducation globale, fondée sur la confiance, la coopération, la fraternité et le progrès de tous.</p>
+
+        <p style="text-align:center; font-style:italic; margin-top:30px; font-size:18px; color:var(--text)">
+          « Que la cité scolaire René Pellet, soit pour chacun de ses élèves, un lieu qui lui ouvre des horizons… »
+        </p>
+      </div>
+    </details>
+
+    <div class="sig">
+      <b>Le Comité de pilotage du projet d’établissement 2026-2030</b>
+      Villeurbanne, le 15 décembre 2025
+    </div>
+
+    <footer class="foot">
+      Projet d’établissement 2026-2030 — Cité scolaire René Pellet
+    </footer>
+  </div>
+
+  <script>
+    ;(function(){
+      try{ localStorage.setItem('pe_last_file', (location.pathname.split('/').pop() || '17-conclusion.html')) }catch(e){}
+    })()
+  </script>
+</body>
+</html>

@@ -1,0 +1,1008 @@
+<!doctype html>
+<html lang=fr>
+<head>
+  <meta charset=utf-8>
+  <meta name=viewport content="width=device-width,initial-scale=1">
+  <title>Le Lycée professionnel — CSRP</title>
+  <meta name=color-scheme content="light dark">
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card:#101a2f;
+      --muted:#9fb0d0;
+      --text:#eaf0ff;
+      --line:rgba(255,255,255,.10);
+      --shadow: 0 18px 55px rgba(0,0,0,.35);
+      --radius:20px;
+
+      --cA:#fbbf24;
+      --cB:#94a3b8;
+      --cC:#6ee7ff;
+      --cD:#a78bfa;
+      --cE:#34d399;
+      --cF:#60a5fa;
+    }
+    @media (prefers-color-scheme: light){
+      :root{
+        --bg:#f5f7ff;
+        --card:#ffffff;
+        --muted:#53627a;
+        --text:#0b1220;
+        --line:rgba(0,0,0,.10);
+        --shadow: 0 18px 55px rgba(30,41,59,.14);
+      }
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(1200px 800px at 10% 0%, rgba(110,231,255,.16), transparent 60%),
+        radial-gradient(900px 700px at 100% 10%, rgba(167,139,250,.14), transparent 55%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.55;
+    }
+    a{color:inherit; text-decoration:none}
+    .wrap{max-width:1100px; margin:0 auto; padding:22px 16px 56px}
+    
+    .topbar{
+      display:flex; gap:12px; align-items:center; justify-content:space-between;
+      padding:14px 14px;
+      background: color-mix(in oklab, var(--card), transparent 10%);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      position: sticky; top:12px; z-index:10;
+      backdrop-filter: blur(10px);
+    }
+    
+    .brand{display:flex; gap:12px; align-items:center; min-width: 240px;}
+    .logo{
+      width:44px; height:44px; border-radius:14px; overflow:hidden;
+      border:1px solid var(--line);
+      background:linear-gradient(135deg, rgba(110,231,255,.22), rgba(167,139,250,.18));
+      display:grid; place-items:center;
+    }
+    .logo img{width:100%; height:100%; object-fit:cover}
+
+    .brand h1{font-size:16px; margin:0}
+    .brand p{margin:2px 0 0; font-size:12px; color:var(--muted)}
+    
+    .nav{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end}
+    .pill{
+      padding:10px 12px; border-radius:999px;
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 12%);
+      font-size:13px;
+    }
+    .pill:hover{transform: translateY(-1px)}
+    @media (max-width: 920px){
+      .topbar{flex-direction:column; align-items:stretch}
+      .nav{justify-content:flex-start}
+    }
+
+    .hero{
+      margin-top:18px;
+      padding:22px 18px;
+      border-radius: calc(var(--radius) + 6px);
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, color-mix(in oklab, var(--card), transparent 6%), color-mix(in oklab, var(--card), transparent 14%));
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+      text-align: center;
+    }
+    .hero:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(700px 260px at 12% 0%, rgba(251,191,36,.18), transparent 62%),
+        radial-gradient(600px 260px at 88% 0%, rgba(110,231,255,.14), transparent 62%);
+      pointer-events:none;
+    }
+    .hero > *{position:relative}
+    .hero h2{margin:0; font-size:28px}
+    .hero p{margin:10px auto 0; font-size:16px; color:var(--muted); max-width:80ch;}
+
+    /* Grille principale (2 colonnes) */
+    .grid{
+      display:grid;
+      grid-template-columns: 1.12fr .88fr;
+      gap:14px;
+      margin-top:14px;
+    }
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
+    }
+
+    .card{
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 6%);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:16px;
+      overflow:hidden;
+    }
+    .card h3{margin:0 0 10px; font-size:16px}
+    .muted{color:var(--muted)}
+    .sub{font-size:12px; color:var(--muted); margin-top:10px}
+
+    .legend{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px}
+    .tag{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px; border-radius:999px;
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 12%);
+      font-size:12px; color:var(--muted);
+      cursor:pointer;
+      user-select:none;
+    }
+    .dot{width:10px; height:10px; border-radius:999px; display:inline-block}
+    .tag[aria-pressed="false"]{opacity:.55}
+
+    .chartWrap{
+      margin-top:10px;
+      border:1px solid var(--line);
+      border-radius:18px;
+      background: color-mix(in oklab, var(--card), transparent 8%);
+      overflow:hidden;
+    }
+    svg{display:block; width:100%; height:auto}
+
+    .kpis{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:10px;
+      margin-top:10px;
+    }
+    @media (max-width: 760px){
+      .kpis{grid-template-columns:1fr}
+    }
+    .kpi{
+      padding:12px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 10%);
+    }
+    .kpi .label{font-size:12px; color:var(--muted)}
+    .kpi .value{font-size:20px; font-weight:900; margin-top:2px}
+    .kpi .hint{font-size:12px; color:var(--muted); margin-top:4px}
+
+    .tabs{display:flex; gap:8px; flex-wrap:wrap; margin:10px 0 0}
+    .tab{
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 12%);
+      font-size:13px;
+      cursor:pointer;
+      user-select:none;
+      font-weight:900;
+    }
+    .tab[aria-selected="true"]{
+      background: linear-gradient(135deg, rgba(110,231,255,.22), rgba(167,139,250,.18));
+    }
+
+    table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      overflow:hidden;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 12%);
+      font-size:13px;
+      margin-top:10px;
+    }
+    th,td{
+      padding:10px 10px;
+      border-bottom:1px solid var(--line);
+      text-align:center;
+      vertical-align:middle;
+    }
+    th{color:var(--muted); font-weight:900}
+    td:first-child, th:first-child{text-align:left}
+    tr:last-child td{border-bottom:none}
+    .deltaUp{color: color-mix(in oklab, var(--cE), var(--text) 20%); font-weight:900}
+    .deltaDown{color: color-mix(in oklab, #fb7185, var(--text) 20%); font-weight:900}
+    .deltaEq{color:var(--muted); font-weight:900}
+
+    .pillRow{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
+    .chip{
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 14%);
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .afterGrid{
+      display:grid;
+      grid-template-columns: minmax(180px, 220px) repeat(4, minmax(160px, 1fr));
+      gap:10px;
+      margin-top:10px;
+    }
+    @media (max-width: 980px){
+      .afterGrid{grid-template-columns: 1fr; }
+    }
+    .hdr{
+      padding:12px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 10%);
+      font-weight:900;
+    }
+    .hdr.small{font-size:12px; color:var(--muted); font-weight:900}
+    .box{
+      padding:12px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 10%);
+      display:grid;
+      gap:6px;
+      position:relative;
+      overflow:hidden;
+    }
+    .box .t{font-size:12px; color:var(--muted); font-weight:900}
+    .box .n{font-size:28px; font-weight:900; line-height:1}
+    .box .p{font-size:12px; color:var(--muted)}
+    .tone1{background: linear-gradient(135deg, rgba(37,99,235,.22), rgba(110,231,255,.10))}
+    .tone2{background: linear-gradient(135deg, rgba(30,64,175,.22), rgba(110,231,255,.10))}
+    .tone3{background: linear-gradient(135deg, rgba(96,165,250,.22), rgba(167,139,250,.10))}
+    .tone4{background: linear-gradient(135deg, rgba(52,211,153,.18), rgba(110,231,255,.10))}
+    .tone5{background: linear-gradient(135deg, rgba(148,163,184,.18), rgba(167,139,250,.10))}
+
+    .stack{
+      display:grid;
+      gap:8px;
+    }
+    .stackRow{
+      display:flex; justify-content:space-between; gap:10px;
+      padding:10px 10px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 12%);
+      font-size:13px;
+    }
+
+    .tooltip{
+      position:fixed;
+      pointer-events:none;
+      transform: translate(-50%, -120%);
+      padding:10px 10px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 0%);
+      box-shadow: var(--shadow);
+      color:var(--text);
+      font-size:12px;
+      display:none;
+      max-width: 320px;
+    }
+    .tooltip b{display:block; margin-bottom:2px}
+
+    details{
+      border:1px solid var(--line);
+      border-radius:18px;
+      background: color-mix(in oklab, var(--card), transparent 10%);
+      overflow:hidden;
+      margin-top:12px;
+    }
+    summary{
+      cursor:pointer;
+      list-style:none;
+      padding:12px 12px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      font-weight:900;
+    }
+    summary::-webkit-details-marker{display:none}
+    .body{padding: 0 12px 12px}
+
+    /* Footer Standard */
+    .foot{
+      margin-top:18px;
+      padding:12px 16px;
+      border-top:1px solid rgba(0,0,0,.08);
+      color:#6b7280;
+      font-size:12px;
+      text-align:center;
+    }
+
+    @media print{
+      .topbar{position:static; box-shadow:none}
+      body{background:#fff}
+      .card,.hero,.topbar,details,.chartWrap{box-shadow:none}
+      .tooltip{display:none!important}
+    }
+  
+    #afterArea{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
+    #afterArea .afterGrid{ min-width: 920px; }
+    .hdr, .box{ min-width:0; }
+    .box .t{ overflow-wrap:anywhere; }
+
+  </style>
+</head>
+
+<body>
+  <div class=wrap>
+    <header class=topbar>
+      <div class=brand>
+        <div class=logo aria-hidden=true>
+           <img src="logo-csrp.png" alt="">
+        </div>
+        <div>
+          <h1>Projet d’établissement</h1>
+          <p>Focus Lycée Pro</p>
+        </div>
+      </div>
+
+      <nav class=nav aria-label=Navigation>
+  <a class=pill href=index.html>Accueil</a>   <a class=pill href=01-sommaire.html>Sommaire</a>
+</nav>
+    </header>
+
+    <section class=hero>
+      <h2>Le Lycée Professionnel</h2>
+      <p>L’évolution de la population scolaire et de ses caractéristiques.</p>
+    </section>
+
+    <section class=grid>
+      <div class=card>
+        <h3>Proportion d’élèves de Terminale CAP notifiés MDPH (hors déficience visuelle)</h3>
+        <div class=sub>Comparaison 2020-2021 vs 2023-2024</div>
+
+        <div class=legend>
+          <div class=tag id=tSans aria-pressed=true role=button tabindex=0>
+            <span class=dot style="background:var(--cB)"></span>
+            Sans notification MDPH
+          </div>
+          <div class=tag id=tNotif aria-pressed=true role=button tabindex=0>
+            <span class=dot style="background:var(--cA)"></span>
+            Notifications MDPH hors DV
+          </div>
+        </div>
+
+        <div class=chartWrap>
+          <svg id=chartNotif viewBox="0 0 760 340" role=img aria-label="Barres empilées proportion MDPH"></svg>
+        </div>
+
+        <div class=kpis id=kpiNotif></div>
+      </div>
+
+      <div class=card>
+        <h3>Repères à retenir</h3>
+        <div class=stack id=quickNotes></div>
+        
+        <details>
+          <summary>Prochaines pages <span class=muted>↕</span></summary>
+          <div class=body>
+            <div class=pillRow>
+              <span class=chip>Méthode retenue</span>
+              <span class=chip>Introduction générale</span>
+              <span class=chip>Axes et orientations</span>
+              <span class=chip>Évaluation du projet</span>
+            </div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class=grid>
+      <div class=card>
+        <h3>Bilan des visites médicales par familles de CAP</h3>
+        <div class=sub>Pour les années scolaires 2023-2024 et 2024-2025 (et comparaison)</div>
+
+        <div class=tabs>
+          <div class=tab id=tabV2324 role=tab tabindex=0 aria-selected=true>2023-2024</div>
+          <div class=tab id=tabV2425 role=tab tabindex=0 aria-selected=false>2024-2025</div>
+          <div class=tab id=tabVCompare role=tab tabindex=0 aria-selected=false>Comparaison</div>
+        </div>
+
+        <div id=areaVisites></div>
+      </div>
+
+      <div class=card>
+        <h3>Lecture rapide</h3>
+        <div class=kpis id=kpiVisites></div>
+      </div>
+    </section>
+
+    <section class=grid>
+      <div class=card>
+        <h3>Répartition du nombre de PPS par familles de CAP</h3>
+        <div class=sub>Avec détail des notifications — années scolaires 2023-2024 et 2024-2025 (et comparaison)</div>
+
+        <div class=tabs>
+          <div class=tab id=tabP2324 role=tab tabindex=0 aria-selected=true>2023-2024</div>
+          <div class=tab id=tabP2425 role=tab tabindex=0 aria-selected=false>2024-2025</div>
+          <div class=tab id=tabPCompare role=tab tabindex=0 aria-selected=false>Comparaison</div>
+        </div>
+
+        <div id=areaPps></div>
+      </div>
+
+      <div class=card>
+        <h3>Totals et variations</h3>
+        <div class=kpis id=kpiPps></div>
+      </div>
+    </section>
+
+    <section class=grid>
+      <div class=card>
+        <h3>Focus sur l’après CAP</h3>
+        <div class=sub>Répartition des élèves sortants par grandes catégories (juillet 2023, juillet 2024, prévisions juillet 2025)</div>
+
+        <div class=tabs>
+          <div class=tab id=tabA2023 role=tab tabindex=0 aria-selected=true>Juillet 2023</div>
+          <div class=tab id=tabA2024 role=tab tabindex=0 aria-selected=false>Juillet 2024</div>
+          <div class=tab id=tabA2025 role=tab tabindex=0 aria-selected=false>Prévisions juillet 2025</div>
+        </div>
+
+        <div id=afterArea></div>
+
+        <details>
+          <summary>Notes figurant sur le schéma <span class=muted>↕</span></summary>
+          <div class=body>
+            <div class=sub id=afterNotes></div>
+          </div>
+        </details>
+      </div>
+
+      <div class=card>
+        <h3>Lecture rapide</h3>
+        <div class=kpis id=kpiAfter></div>
+      </div>
+    </section>
+
+    <footer class=foot>
+      <div>Projet d’établissement 2026-2030 — Cité scolaire René Pellet</div>
+    </footer>
+  </div>
+
+  <div class=tooltip id=tip></div>
+
+  <script>
+    ;(function(){
+      try{ localStorage.setItem("pe_last_file", (location.pathname.split("/").pop() || "06-lycee-pro.html")) }catch(e){}
+    })()
+
+    const tip = document.getElementById("tip")
+    function showTip(x,y,html){
+      tip.innerHTML = html
+      tip.style.left = x + "px"
+      tip.style.top = y + "px"
+      tip.style.display = "block"
+    }
+    function hideTip(){ tip.style.display = "none" }
+
+    function pct(n,d){
+      const v = d ? (n/d)*100 : 0
+      const r = Math.round(v*10)/10
+      return (""+r).replace(".",",") + "%"
+    }
+    function fmt(n){
+      return (""+n).replace(".",",")
+    }
+    function clear(node){ while(node.firstChild) node.removeChild(node.firstChild) }
+
+    function renderTable(header, rows){
+      const tbl = document.createElement("table")
+      const thead = document.createElement("thead")
+      const trh = document.createElement("tr")
+      header.forEach(h=>{
+        const th = document.createElement("th")
+        th.textContent = h
+        trh.appendChild(th)
+      })
+      thead.appendChild(trh)
+      tbl.appendChild(thead)
+
+      const tb = document.createElement("tbody")
+      rows.forEach(r=>{
+        const tr = document.createElement("tr")
+        r.forEach(c=>{
+          const td = document.createElement("td")
+          td.textContent = c
+          tr.appendChild(td)
+        })
+        tb.appendChild(tr)
+      })
+      tbl.appendChild(tb)
+      return tbl
+    }
+
+    function deltaClass(v){
+      if(v>0) return "deltaUp"
+      if(v<0) return "deltaDown"
+      return "deltaEq"
+    }
+    function deltaStr(v){
+      if(v>0) return "+"+v
+      return ""+v
+    }
+
+    function kpiBlock(label, value, hint){
+      const d=document.createElement("div")
+      d.className="kpi"
+      d.innerHTML = `<div class=label>${label}</div><div class=value>${value}</div><div class=hint>${hint||""}</div>`
+      return d
+    }
+
+    function setTabs(on, ...offs){
+      on.setAttribute("aria-selected","true")
+      offs.forEach(x=>x.setAttribute("aria-selected","false"))
+    }
+
+    function wireTabClick(tab, fn){
+      tab.addEventListener("click", fn)
+      tab.addEventListener("keydown", e=>{
+        if(e.key==="Enter"||e.key===" "){ e.preventDefault(); fn() }
+      })
+    }
+
+    function elNS(name, attrs){
+      const n = document.createElementNS("http://www.w3.org/2000/svg", name)
+      if(attrs) Object.keys(attrs).forEach(k => n.setAttribute(k, attrs[k]))
+      return n
+    }
+
+    const notifData = [
+      { label:"2020-2021", sans:16, notif:18 },
+      { label:"2023-2024", sans:6,  notif:32 }
+    ]
+    const notifState = { showSans:true, showNotif:true }
+    const chartNotif = document.getElementById("chartNotif")
+    const kpiNotif = document.getElementById("kpiNotif")
+
+    function drawNotif(){
+      clear(chartNotif)
+
+      const W=760, H=340
+      const padL=70, padR=20, padT=26, padB=70
+      const plotW = W-padL-padR
+      const plotH = H-padT-padB
+
+      const grid = elNS("g")
+      ;[0,20,40,60,80,100].forEach(t=>{
+        const y = padT + plotH - (t/100)*plotH
+        grid.appendChild(elNS("line",{x1:padL, y1:y, x2:W-padR, y2:y, stroke:"rgba(255,255,255,.10)"}))
+        const tx = elNS("text",{x:padL-10, y:y+4, "text-anchor":"end", fill:"rgba(159,176,208,.95)", "font-size":"12"})
+        tx.textContent = t + "%"
+        grid.appendChild(tx)
+      })
+      chartNotif.appendChild(grid)
+
+      const barW = Math.min(160, plotW/3)
+      const gap = (plotW - barW*notifData.length)/(notifData.length+1)
+
+      notifData.forEach((d,i)=>{
+        const total = d.sans + d.notif
+        const pSans = d.sans/total*100
+        const pNotif = d.notif/total*100
+
+        const x = padL + gap + i*(barW+gap)
+        const y0 = padT + plotH
+        let curY = y0
+
+        function rectPart(p, color, label){
+          const h = (p/100)*plotH
+          curY -= h
+          const r = elNS("rect",{x:x, y:curY, width:barW, height:h, rx:"10", fill:color, opacity:"0.95"})
+          r.addEventListener("mousemove",(e)=>{
+            const html =
+              "<b>"+d.label+"</b>"+
+              "Total : "+total+"<br>"+
+              "Sans notif : "+d.sans+" ("+pct(d.sans,total)+")<br>"+
+              "Notif hors DV : "+d.notif+" ("+pct(d.notif,total)+")"
+            showTip(e.clientX, e.clientY, html)
+          })
+          r.addEventListener("mouseleave", hideTip)
+          chartNotif.appendChild(r)
+          return r
+        }
+
+        if(!notifState.showSans && !notifState.showNotif){
+          chartNotif.appendChild(elNS("rect",{x:x, y:padT, width:barW, height:plotH, rx:"10", fill:"rgba(148,163,184,.18)"}))
+        }else if(notifState.showSans && !notifState.showNotif){
+          rectPart(100, "var(--cB)")
+        }else if(!notifState.showSans && notifState.showNotif){
+          rectPart(100, "var(--cA)")
+        }else{
+          rectPart(pSans, "var(--cB)")
+          rectPart(pNotif, "var(--cA)")
+        }
+
+        const label = elNS("text",{x:x+barW/2, y:H-padB+28, "text-anchor":"middle", fill:"rgba(159,176,208,.95)", "font-size":"12"})
+        label.textContent = d.label
+        chartNotif.appendChild(label)
+
+        const big = elNS("text",{x:x+barW+16, y:padT+plotH*0.45, fill:"rgba(251,191,36,.95)", "font-size":"30", "font-weight":"900"})
+        big.textContent = pct(d.notif, total)
+        chartNotif.appendChild(big)
+
+        const midTxt = elNS("text",{x:x+barW/2, y:padT+plotH*0.52, "text-anchor":"middle", fill:"rgba(15,23,42,.70)", "font-size":"32", "font-weight":"900"})
+        midTxt.textContent = d.notif
+        chartNotif.appendChild(midTxt)
+      })
+
+      const title = elNS("text",{x:padL, y:18, fill:"rgba(159,176,208,.95)", "font-size":"12"})
+      title.textContent = "Comparaison Terminale CAP — MDPH hors DV (proportions)"
+      chartNotif.appendChild(title)
+    }
+
+    function renderKpiNotif(){
+      kpiNotif.innerHTML = ""
+      notifData.forEach(d=>{
+        const total = d.sans + d.notif
+        kpiNotif.appendChild(kpiBlock(d.label, pct(d.notif,total)+" notifiés", d.notif+" notifiés / "+total+" élèves"))
+      })
+      const delta = (notifData[1].notif/(notifData[1].sans+notifData[1].notif) - notifData[0].notif/(notifData[0].sans+notifData[0].notif))*100
+      kpiNotif.appendChild(kpiBlock("Évolution", fmt(Math.round(delta*10)/10)+" pts", "variation du taux de notification"))
+    }
+
+    function toggleTag(btn, key){
+      const pressed = btn.getAttribute("aria-pressed")==="true"
+      btn.setAttribute("aria-pressed", String(!pressed))
+      notifState[key] = !pressed
+      drawNotif()
+    }
+
+    const tSans = document.getElementById("tSans")
+    const tNotif = document.getElementById("tNotif")
+    tSans.addEventListener("click", ()=>toggleTag(tSans, "showSans"))
+    tNotif.addEventListener("click", ()=>toggleTag(tNotif, "showNotif"))
+    tSans.addEventListener("keydown", e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); toggleTag(tSans,"showSans") }})
+    tNotif.addEventListener("keydown", e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); toggleTag(tNotif,"showNotif") }})
+
+    const quickNotes = document.getElementById("quickNotes")
+    function fillNotes(){
+      const a = notifData[0], b = notifData[1]
+      const ta = a.sans+a.notif, tb = b.sans+b.notif
+      quickNotes.innerHTML=""
+      quickNotes.appendChild(rowNote("Terminale CAP — notifiés MDPH hors DV", pct(b.notif,tb)+" en "+b.label, "contre "+pct(a.notif,ta)+" en "+a.label))
+      quickNotes.appendChild(rowNote("Visites médicales", "Comparer 2023-2024 et 2024-2025", "aptitudes, réserves, inaptitudes"))
+      quickNotes.appendChild(rowNote("PPS", "Comparer 2023-2024 et 2024-2025", "SESSAD, aide humaine, ULIS, IME/ITEP"))
+      quickNotes.appendChild(rowNote("Après CAP", "3 cohortes : 2023, 2024, 2025", "emploi, poursuite d’études, maintien, sans solution"))
+    }
+    function rowNote(title, main, sub){
+      const d=document.createElement("div")
+      d.className="stackRow"
+      d.innerHTML = `<div><b>${title}</b><div class=muted style="font-size:12px">${sub||""}</div></div><div class=muted>${main}</div>`
+      return d
+    }
+    fillNotes()
+
+    const visites = {
+      "2023-2024":{
+        header:["CSRP — 2023-2024","CAP Métiers d’Art","CAP Agricoles","CAP PSR","Total"],
+        rows:[
+          ["Nombre d’élèves en 1ère et 2ème années CAP","21","29","15","65"],
+          ["Élèves majeurs (pas de visite médicale)","4 (19%)","4 (14%)","0 (0%)","8 (12%)"],
+          ["Aptitudes","1 (5%)","3 (10%)","3 (20%)","7 (11%)"],
+          ["Réserves","14 (67%)","20 (69%)","11 (73%)","45 (69%)"],
+          ["Inaptitudes","2 (10%)","2 (7%)","1 (7%)","5 (8%)"]
+        ],
+        totals:{eleves:65, majeurs:8, apt:7, res:45, inap:5}
+      },
+      "2024-2025":{
+        header:["CSRP — 2024-2025","CAP Métiers d’Art","CAP Agricoles","CAP PSR","Total"],
+        rows:[
+          ["Nombre d’élèves en 1ère et 2ème années CAP","22","33","14","69"],
+          ["Élèves majeurs (pas de visite médicale)","4 (18%)","6 (18%)","1 (7%)","11 (16%)"],
+          ["Aptitudes","0 (0%)","6 (18%)","3 (21%)","9 (13%)"],
+          ["Réserves","16 (73%)","19 (58%)","9 (64%)","44 (64%)"],
+          ["Inaptitudes","1 (5%)","0 (0%)","1 (7%)","2 (3%)"]
+        ],
+        totals:{eleves:69, majeurs:11, apt:9, res:44, inap:2}
+      }
+    }
+
+    const areaVisites = document.getElementById("areaVisites")
+    const kpiVisites = document.getElementById("kpiVisites")
+
+    function paintVisites(mode){
+      areaVisites.innerHTML=""
+      kpiVisites.innerHTML=""
+
+      if(mode==="2023-2024" || mode==="2024-2025"){
+        const d = visites[mode]
+        areaVisites.appendChild(renderTable(d.header, d.rows))
+
+        const t = d.totals
+        kpiVisites.appendChild(kpiBlock("Année", mode, ""))
+        kpiVisites.appendChild(kpiBlock("Effectif", ""+t.eleves, "1ère + 2ème années CAP"))
+        kpiVisites.appendChild(kpiBlock("Majeurs", t.majeurs+" ("+pct(t.majeurs,t.eleves)+")", "pas de visite médicale"))
+        kpiVisites.appendChild(kpiBlock("Aptitudes", t.apt+" ("+pct(t.apt,t.eleves)+")", ""))
+        kpiVisites.appendChild(kpiBlock("Réserves", t.res+" ("+pct(t.res,t.eleves)+")", ""))
+        kpiVisites.appendChild(kpiBlock("Inaptitudes", t.inap+" ("+pct(t.inap,t.eleves)+")", ""))
+      }else{
+        const a = visites["2023-2024"].totals
+        const b = visites["2024-2025"].totals
+        const rows = [
+          ["Indicateur","2023-2024","2024-2025","Écart"],
+          ["Effectif total", a.eleves, b.eleves, (b.eleves-a.eleves)],
+          ["Majeurs", a.majeurs, b.majeurs, (b.majeurs-a.majeurs)],
+          ["Aptitudes", a.apt, b.apt, (b.apt-a.apt)],
+          ["Réserves", a.res, b.res, (b.res-a.res)],
+          ["Inaptitudes", a.inap, b.inap, (b.inap-a.inap)]
+        ]
+        areaVisites.appendChild(renderTable(rows[0], rows.slice(1)))
+
+        kpiVisites.appendChild(kpiBlock("Inaptitudes", b.inap+" ("+pct(b.inap,b.eleves)+")", "2024-2025"))
+        kpiVisites.appendChild(kpiBlock("Inaptitudes", a.inap+" ("+pct(a.inap,a.eleves)+")", "2023-2024"))
+        kpiVisites.appendChild(kpiBlock("Évolution", (b.inap-a.inap>=0?"+":"")+(b.inap-a.inap), "en nombre"))
+      }
+    }
+
+    const tabV2324 = document.getElementById("tabV2324")
+    const tabV2425 = document.getElementById("tabV2425")
+    const tabVCompare = document.getElementById("tabVCompare")
+    function actV2324(){ setTabs(tabV2324, tabV2425, tabVCompare); paintVisites("2023-2024") }
+    function actV2425(){ setTabs(tabV2425, tabV2324, tabVCompare); paintVisites("2024-2025") }
+    function actVComp(){ setTabs(tabVCompare, tabV2324, tabV2425); paintVisites("compare") }
+    wireTabClick(tabV2324, actV2324)
+    wireTabClick(tabV2425, actV2425)
+    wireTabClick(tabVCompare, actVComp)
+
+    actV2324()
+
+    const pps = {
+      "2023-2024":{
+        header:["CSRP — 2023-2024","CAP Métiers d’Art","CAP Agricoles","CAP PSR","Total"],
+        rows:[
+          ["Nombre d’élèves (1ère + 2ème années CAP)","21","29","15","65"],
+          ["Nombre de PPS","20 (95%)","21 (72%)","12 (80%)","53 (82%)"],
+          ["Notification SESSAD","14 (67%)","14 (48%)","8 (53%)","36 (55%)"],
+          ["Prise en charge effective (SESSAD/SSEFS/S3AS/PCPE/DITEP/DIME)","1 (7% des notifiés)","11 (79% des notifiés)","5 (63% des notifiés)","17 (47% des notifiés)"],
+          ["En attente de place en SESSAD","13 (93% des notifiés)","3 (21% des notifiés)","3 (38% des notifiés)","19 (53% des notifiés)"],
+          ["Notification Aide humaine","7 (33%)","11 (38%)","3 (20%)","21 (32%)"],
+          ["Notification ULIS","17 (81%)","11 (38%)","7 (47%)","35 (54%)"],
+          ["Notification IME ou ITEP","8 (38%)","1 (3%)","2 (13%)","11 (17%)"]
+        ],
+        totals:{
+          eleves:65, pps:53, sessad:36, prise:17, attente:19, aide:21, ulis:35, ime:11
+        }
+      },
+      "2024-2025":{
+        header:["CSRP — 2024-2025","CAP Métiers d’Art","CAP Agricoles","CAP PSR","Total"],
+        rows:[
+          ["Nombre d’élèves (1ère + 2ème années CAP)","18","32","15","65"],
+          ["Nombre de PPS","18 (100%)","25 (78%)","14 (93%)","57 (88%)"],
+          ["Notification SESSAD","9 (50%)","10 (31%)","10 (67%)","29 (45%)"],
+          ["Prise en charge effective (SESSAD/SSEFS/S3AS/PCPE/DITEP/DIME)","0 (0% des notifiés)","5 (50% des notifiés)","4 (40% des notifiés)","9 (31% des notifiés)"],
+          ["En attente de place en SESSAD","9 (100% des notifiés)","5 (50% des notifiés)","6 (60% des notifiés)","20 (69% des notifiés)"],
+          ["Notification Aide humaine","6 (33%)","9 (36%)","2 (14%)","17 (30%)"],
+          ["Notification ULIS","15 (83%)","13 (52%)","10 (71%)","38 (67%)"],
+          ["Notification IME ou ITEP","7 (39%)","3 (12%)","3 (21%)","13 (23%)"]
+        ],
+        totals:{
+          eleves:65, pps:57, sessad:29, prise:9, attente:20, aide:17, ulis:38, ime:13
+        }
+      }
+    }
+
+    const areaPps = document.getElementById("areaPps")
+    const kpiPps = document.getElementById("kpiPps")
+
+    function paintPps(mode){
+      areaPps.innerHTML=""
+      kpiPps.innerHTML=""
+
+      if(mode==="2023-2024" || mode==="2024-2025"){
+        const d = pps[mode]
+        areaPps.appendChild(renderTable(d.header, d.rows))
+
+        const t = d.totals
+        kpiPps.appendChild(kpiBlock("Année", mode, ""))
+        kpiPps.appendChild(kpiBlock("PPS (total)", t.pps+" ("+pct(t.pps,t.eleves)+")", "sur "+t.eleves+" élèves"))
+        kpiPps.appendChild(kpiBlock("SESSAD (total)", t.sessad+" ("+pct(t.sessad,t.eleves)+")", ""))
+        kpiPps.appendChild(kpiBlock("Prise en charge effective", t.prise+" ("+pct(t.prise,t.sessad)+")", "parmi notifiés SESSAD"))
+        kpiPps.appendChild(kpiBlock("En attente SESSAD", t.attente+" ("+pct(t.attente,t.sessad)+")", "parmi notifiés SESSAD"))
+        kpiPps.appendChild(kpiBlock("ULIS (total)", t.ulis+" ("+pct(t.ulis,t.eleves)+")", ""))
+      }else{
+        const a = pps["2023-2024"].totals
+        const b = pps["2024-2025"].totals
+        const rows = [
+          ["Indicateur (totaux)","2023-2024","2024-2025","Écart"],
+          ["Élèves", a.eleves, b.eleves, (b.eleves-a.eleves)],
+          ["PPS", a.pps, b.pps, (b.pps-a.pps)],
+          ["SESSAD", a.sessad, b.sessad, (b.sessad-a.sessad)],
+          ["Prise en charge effective (sur SESSAD)", a.prise, b.prise, (b.prise-a.prise)],
+          ["En attente SESSAD (sur SESSAD)", a.attente, b.attente, (b.attente-a.attente)],
+          ["Aide humaine", a.aide, b.aide, (b.aide-a.aide)],
+          ["ULIS", a.ulis, b.ulis, (b.ulis-a.ulis)],
+          ["IME/ITEP", a.ime, b.ime, (b.ime-a.ime)]
+        ]
+        const tbl = renderTable(rows[0], rows.slice(1).map(r=>{
+          const v = parseInt(r[3],10)
+          return [r[0], ""+r[1], ""+r[2], r[3]]
+        }))
+        areaPps.appendChild(tbl)
+
+        function kDelta(label, aVal, bVal, hint){
+          const v = bVal - aVal
+          const value = deltaStr(v)
+          const el = kpiBlock(label, value, hint)
+          const cls = deltaClass(v)
+          el.querySelector(".value").classList.add(cls)
+          return el
+        }
+
+        kpiPps.appendChild(kpiBlock("PPS", b.pps+" ("+pct(b.pps,b.eleves)+")", "2024-2025"))
+        kpiPps.appendChild(kpiBlock("PPS", a.pps+" ("+pct(a.pps,a.eleves)+")", "2023-2024"))
+        kpiPps.appendChild(kDelta("Écart PPS", a.pps, b.pps, "en nombre"))
+        kpiPps.appendChild(kDelta("Écart SESSAD", a.sessad, b.sessad, "en nombre"))
+        kpiPps.appendChild(kDelta("Écart ULIS", a.ulis, b.ulis, "en nombre"))
+        kpiPps.appendChild(kDelta("Écart IME/ITEP", a.ime, b.ime, "en nombre"))
+      }
+    }
+
+    const tabP2324 = document.getElementById("tabP2324")
+    const tabP2425 = document.getElementById("tabP2425")
+    const tabPCompare = document.getElementById("tabPCompare")
+    function actP2324(){ setTabs(tabP2324, tabP2425, tabPCompare); paintPps("2023-2024") }
+    function actP2425(){ setTabs(tabP2425, tabP2324, tabPCompare); paintPps("2024-2025") }
+    function actPComp(){ setTabs(tabPCompare, tabP2324, tabP2425); paintPps("compare") }
+    wireTabClick(tabP2324, actP2324)
+    wireTabClick(tabP2425, actP2425)
+    wireTabClick(tabPCompare, actPComp)
+
+    actP2324()
+
+    const after = {
+      "2023":{
+        total:36,
+        items:{
+          emploi:5,
+          insertion:2,
+          alternance:11,
+          projet2cap:3,
+          cap3ans:2,
+          maintien:5,
+          retourVol:6,
+          retourInvol:3
+        },
+        notes:[
+          "Note : 5 réinscrits à la CSRP (CAP 3 ans ou 2ème CAP) — mention figurant sur le schéma."
+        ]
+      },
+      "2024":{
+        total:35,
+        items:{
+          emploi:4,
+          insertion:4,
+          alternance:5,
+          projet2cap:6,
+          cap3ans:4,
+          maintien:5,
+          retourVol:5,
+          retourInvol:2
+        },
+        notes:[
+          "Note : 5 DAFI — mention figurant sur le schéma.",
+          "Note : 2 en attente d’une solution (stages vers l’ordinaire non concluants) — mention figurant sur le schéma."
+        ]
+      },
+      "2025":{
+        total:32,
+        items:{
+          emploi:3,
+          insertion:2,
+          alternance:3,
+          projet2cap:6,
+          cap3ans:2,
+          maintien:8,
+          retourVol:5,
+          retourInvol:3
+        },
+        notes:[]
+      }
+    }
+
+    const afterArea = document.getElementById("afterArea")
+    const afterNotes = document.getElementById("afterNotes")
+    const kpiAfter = document.getElementById("kpiAfter")
+
+    function box(title, n, total, tone, extra){
+      const d=document.createElement("div")
+      d.className="box "+tone
+      d.innerHTML = `<div class=t>${title}</div><div class=n>${n}</div><div class=p>${pct(n,total)} ${extra?("• "+extra):""}</div>`
+      return d
+    }
+
+    function paintAfter(yearKey){
+      const d = after[yearKey]
+      const it = d.items
+      const total = d.total
+
+      afterArea.innerHTML=""
+      afterNotes.innerHTML=""
+      kpiAfter.innerHTML=""
+
+      const grid = document.createElement("div")
+      grid.className="afterGrid"
+
+      grid.appendChild(hdrCol("Élèves sortants", yearLabel(yearKey)+" • "+total+" élèves"))
+      grid.appendChild(hdrCol("Vers l’emploi", ""))
+      grid.appendChild(hdrCol("Poursuite d’études", ""))
+      grid.appendChild(hdrCol("Maintien au lycée", ""))
+      grid.appendChild(hdrCol("Sans projet / solution", ""))
+
+      grid.appendChild(hdrSmall("Détails", "Emploi et insertion"))
+      grid.appendChild(box("Emploi", it.emploi, total, "tone2"))
+      grid.appendChild(box("Dispositif insertion pro (milieu protégé / ordinaire)", it.insertion, total, "tone1"))
+      grid.appendChild(box("Bac Pro / CAP alternance", it.alternance, total, "tone3"))
+      grid.appendChild(box("Projet 2ème CAP / formation adaptée", it.projet2cap, total, "tone3"))
+      grid.appendChild(box("CAP 3 ans avec diplôme", it.cap3ans, total, "tone3"))
+      grid.appendChild(box("Sans solution / attente structure adaptée", it.maintien, total, "tone4"))
+      const last = document.createElement("div")
+      last.className="box tone5"
+      last.innerHTML = `
+        <div class=t>Retour maison / décrochage / autre</div>
+        <div class=stack>
+          <div class=stackRow><div>Retour maison volontaire / décrochage</div><div><b>${it.retourVol}</b> • ${pct(it.retourVol,total)}</div></div>
+          <div class=stackRow><div>Retour maison involontaire / attente insertion</div><div><b>${it.retourInvol}</b> • ${pct(it.retourInvol,total)}</div></div>
+        </div>
+      `
+      grid.appendChild(last)
+
+      afterArea.appendChild(grid)
+
+      const sEmploi = it.emploi + it.insertion
+      const sEtudes = it.alternance + it.projet2cap + it.cap3ans
+      const sMaintien = it.maintien
+      const sSans = it.retourVol + it.retourInvol
+
+      kpiAfter.appendChild(kpiBlock("Total sortants", ""+total, yearLabel(yearKey)))
+      kpiAfter.appendChild(kpiBlock("Vers l’emploi", sEmploi+" ("+pct(sEmploi,total)+")", "emploi + insertion"))
+      kpiAfter.appendChild(kpiBlock("Poursuite d’études", sEtudes+" ("+pct(sEtudes,total)+")", "alternance + 2e CAP + CAP 3 ans"))
+      kpiAfter.appendChild(kpiBlock("Maintien au lycée", sMaintien+" ("+pct(sMaintien,total)+")", "attente autre solution"))
+      kpiAfter.appendChild(kpiBlock("Sans projet/solution", sSans+" ("+pct(sSans,total)+")", "retours maison"))
+
+      afterNotes.innerHTML = (d.notes && d.notes.length) ? d.notes.map(x=>`• ${x}`).join("<br>") : "Aucune note supplémentaire indiquée."
+    }
+
+    function yearLabel(k){
+      if(k==="2023") return "Juillet 2023"
+      if(k==="2024") return "Juillet 2024"
+      return "Prévisions juillet 2025"
+    }
+
+    function hdrCol(title, sub){
+      const d=document.createElement("div")
+      d.className="hdr"
+      d.innerHTML = `<div>${title}</div>${sub?(`<div class="muted" style="font-size:12px">${sub}</div>`):""}`
+      return d
+    }
+    function hdrSmall(title, sub){
+      const d=document.createElement("div")
+      d.className="hdr small"
+      d.innerHTML = `<div>${title}</div>${sub?(`<div style="margin-top:2px">${sub}</div>`):""}`
+      return d
+    }
+
+    const tabA2023 = document.getElementById("tabA2023")
+    const tabA2024 = document.getElementById("tabA2024")
+    const tabA2025 = document.getElementById("tabA2025")
+    function actA2023(){ setTabs(tabA2023, tabA2024, tabA2025); paintAfter("2023") }
+    function actA2024(){ setTabs(tabA2024, tabA2023, tabA2025); paintAfter("2024") }
+    function actA2025(){ setTabs(tabA2025, tabA2023, tabA2024); paintAfter("2025") }
+    wireTabClick(tabA2023, actA2023)
+    wireTabClick(tabA2024, actA2024)
+    wireTabClick(tabA2025, actA2025)
+
+    actA2023()
+
+    // Initialisation SÉCURISÉE (attente de la page)
+    document.addEventListener("DOMContentLoaded", function(){
+      drawNotif();
+      renderKpiNotif();
+      actV2324();
+      actP2324();
+      actA2023();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang=fr>
+<head>
+  <meta charset=utf-8>
+  <meta name=viewport content="width=device-width,initial-scale=1">
+  <title>Indicateurs spécifiques — CSRP</title>
+  <meta name=color-scheme content="light dark">
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card:#101a2f;
+      --muted:#9fb0d0;
+      --text:#eaf0ff;
+      --line:rgba(255,255,255,.10);
+      --accent:#6ee7ff;
+      --accent2:#0ea5a8;
+      --accent3:#a78bfa;
+      --shadow: 0 18px 55px rgba(0,0,0,.35);
+      --radius:20px;
+    }
+    @media (prefers-color-scheme: light){
+      :root{
+        --bg:#f5f7ff;
+        --card:#ffffff;
+        --muted:#53627a;
+        --text:#0b1220;
+        --line:rgba(0,0,0,.10);
+        --shadow: 0 18px 55px rgba(30,41,59,.14);
+      }
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(1200px 800px at 10% 0%, rgba(110,231,255,.16), transparent 60%),
+        radial-gradient(900px 700px at 100% 10%, rgba(167,139,250,.14), transparent 55%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.55;
+    }
+    a{color:inherit; text-decoration:none}
+    .wrap{max-width:1100px; margin:0 auto; padding:22px 16px 56px}
+    
+    .topbar{
+      display:flex; gap:12px; align-items:center; justify-content:space-between;
+      padding:14px 14px;
+      background: color-mix(in oklab, var(--card), transparent 10%);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      position: sticky; top:12px; z-index:10;
+      backdrop-filter: blur(10px);
+    }
+    
+    .brand{display:flex; gap:12px; align-items:center; min-width: 240px;}
+    .logo{
+      width:44px; height:44px; border-radius:14px; overflow:hidden;
+      border:1px solid var(--line);
+      background:linear-gradient(135deg, rgba(110,231,255,.22), rgba(167,139,250,.18));
+      display:grid; place-items:center;
+    }
+    .logo img{width:100%; height:100%; object-fit:cover}
+
+    .brand h1{font-size:16px; margin:0}
+    .brand p{margin:2px 0 0; font-size:12px; color:var(--muted)}
+    
+    .nav{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end}
+    .pill{
+      padding:10px 12px; border-radius:999px;
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 12%);
+      font-size:13px;
+    }
+    .pill:hover{transform: translateY(-1px)}
+    @media (max-width: 920px){
+      .topbar{flex-direction:column; align-items:stretch}
+      .nav{justify-content:flex-start}
+    }
+
+    .hero{
+      margin-top:18px;
+      padding:22px 18px;
+      border-radius: calc(var(--radius) + 6px);
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, color-mix(in oklab, var(--card), transparent 6%), color-mix(in oklab, var(--card), transparent 14%));
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+      text-align: center;
+    }
+    .hero:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(700px 260px at 12% 0%, rgba(110,231,255,.18), transparent 62%),
+        radial-gradient(600px 260px at 88% 0%, rgba(14,165,168,.14), transparent 62%);
+      pointer-events:none;
+    }
+    .hero > *{position:relative}
+    .hero h2{margin:0; font-size:28px}
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:14px;
+      margin-top:14px;
+    }
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
+    }
+
+    .card{
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 6%);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:16px;
+    }
+    .card h3{margin:0 0 10px; font-size:16px}
+    .muted{color:var(--muted)}
+
+    .legend{
+      display:flex; gap:10px; flex-wrap:wrap; margin-top:10px
+    }
+    .tag{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px; border-radius:999px;
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 12%);
+      font-size:12px; color:var(--muted);
+      cursor:pointer;
+      user-select:none;
+    }
+    .dot{width:10px; height:10px; border-radius:999px; display:inline-block}
+    .tag[aria-pressed="false"]{opacity:.55}
+
+    .chartWrap{
+      margin-top:10px;
+      border:1px solid var(--line);
+      border-radius:18px;
+      background: color-mix(in oklab, var(--card), transparent 8%);
+      overflow:hidden;
+    }
+    svg{display:block; width:100%; height:auto}
+    .tooltip{
+      position:fixed;
+      pointer-events:none;
+      transform: translate(-50%, -120%);
+      padding:10px 10px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 0%);
+      box-shadow: var(--shadow);
+      color:var(--text);
+      font-size:12px;
+      display:none;
+      max-width: 240px;
+    }
+    .tooltip b{display:block; margin-bottom:2px}
+    .tbl{
+      margin-top:10px;
+      display:grid;
+      gap:10px;
+    }
+    .row{
+      display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+      padding:10px 10px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 12%);
+      font-size:13px;
+    }
+    .row .r{color:var(--muted)}
+    
+    /* Style pour le bloc repliable (Texte projet) */
+    details{
+      border:1px solid var(--line);
+      border-radius:18px;
+      background: color-mix(in oklab, var(--card), transparent 10%);
+      overflow:hidden;
+      margin-top:0;
+    }
+    summary{
+      cursor:pointer;
+      list-style:none;
+      padding:14px 16px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      font-weight:900;
+      /* CORRECTION : Couleur normale (pas bleu) */
+      color: var(--text); 
+    }
+    summary::-webkit-details-marker{display:none}
+    .body{padding: 0 16px 16px; font-size:14px; color:var(--muted); text-align:justify}
+    .body p { margin: 0 0 10px; }
+    .body p:last-child { margin: 0; }
+
+    .chev{
+      width:24px;height:24px;flex:0 0 24px;
+      display:grid;place-items:center;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.1);
+      font-size:12px;
+      transition:transform .18s ease;
+      color:var(--text);
+    }
+    details[open] .chev{transform:rotate(180deg)}
+
+    /* Style pour les liens de navigation (Focus structure) */
+    .nav-grid {
+        display: grid; gap: 10px;
+    }
+    .nav-card {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 16px;
+        border-radius: 16px;
+        border: 1px solid var(--line);
+        background: linear-gradient(135deg, color-mix(in oklab, var(--card), transparent 10%), color-mix(in oklab, var(--card), transparent 20%));
+        font-weight: 800;
+        transition: transform 0.2s, background 0.2s;
+    }
+    .nav-card:hover {
+        transform: translateY(-2px);
+        background: linear-gradient(135deg, color-mix(in oklab, var(--card), transparent 5%), color-mix(in oklab, var(--card), transparent 15%));
+        border-color: var(--accent);
+    }
+    .nav-arrow {
+        width: 24px; height: 24px;
+        border-radius: 50%;
+        background: var(--line);
+        display: grid; place-items: center;
+        font-size: 12px;
+    }
+
+    /* --- FOOTER STANDARDISÉ --- */
+    .foot{
+      margin-top:18px;
+      padding:12px 16px;
+      border-top:1px solid rgba(0,0,0,.08);
+      color:#6b7280;
+      font-size:12px;
+      text-align:center;
+    }
+
+    @media print{
+      .topbar{position:static; box-shadow:none}
+      body{background:#fff}
+      .card,.hero,.topbar,details,.chartWrap{box-shadow:none}
+      .tooltip{display:none!important}
+    }
+  </style>
+</head>
+
+<body>
+  <div class=wrap>
+    <header class=topbar>
+      <a href="index.html" class=brand>
+        <div class="logo">
+           <img src="logo-csrp.png" alt="">
+        </div>
+        <div>
+          <h1>Projet d’établissement</h1>
+          <p>Indicateurs spécifiques</p>
+        </div>
+      </a>
+
+      <nav class=nav aria-label=Navigation>
+  <a class=pill href=index.html>Accueil</a>   <a class=pill href=01-sommaire.html>Sommaire</a>
+</nav>
+    </header>
+
+    <section class=hero>
+      <h2>Quelques indicateurs spécifiques à la CSRP</h2>
+    </section>
+
+    <section class="grid" style="grid-template-columns: 1fr; margin-top:14px;">
+        <details>
+            <summary>
+                Lire les précautions de lecture et le contexte
+                <span class="chev">▼</span>
+            </summary>
+            <div class="body">
+                <p>Au préalable, il est important de rappeler ici que la singularité du public et les faibles effectifs dans chaque formation ne sont pas visibles derrière les chiffres mais peuvent être des biais statistiques. Ces indicateurs sont à considérer avec grande prudence, notamment pour ce qui est du pourcentage de réussite globale. Les écarts de résultats d’une année à l’autre sont d’abord liés aux profils singuliers des élèves de chaque promotion. Les évaluations nationales, par leur format peu adapté aux élèves en situation de handicap, illustrent cette situation et sont peu exploitables.</p>
+                <p>D’autres indicateurs élaborés par les équipes de la CSRP ont été davantage exploités pour suivre l’évolution et les besoins de notre public scolaire : l’évolution du nombre d’heures d’aide humaine notifié par la MDPH, l’insertion des jeunes en situation de handicap, l’évolution des décisions des visites médicales…</p>
+            </div>
+        </details>
+    </section>
+
+    <section class=grid>
+      <div class=card>
+        <h3>Le PIAL de la CSRP</h3>
+        <div style="font-size:13px; color:var(--muted); margin-bottom:10px;">
+          Évolution du PIAL entre 2019 et 2025 : heures d’aide humaine notifiées et heures effectives, avec repères AESH et ULIS.
+        </div>
+
+        <div class=legend>
+          <div class=tag id=tNotifie aria-pressed=true role=button tabindex=0>
+            <span class=dot style="background:var(--accent)"></span>
+            Heures AH notifiées
+          </div>
+          <div class=tag id=tEffectif aria-pressed=true role=button tabindex=0>
+            <span class=dot style="background:var(--accent2)"></span>
+            Heures AH effectives
+          </div>
+        </div>
+
+        <div class=chartWrap>
+          <svg id=chart viewBox="0 0 760 360" role=img aria-label="Graphique heures AH notifiées et effectives"></svg>
+        </div>
+
+        <div class=tbl id=tbl></div>
+        
+        </div>
+
+      <div class=card>
+        <h3>Détails par structure</h3>
+        <div style="font-size:13px; color:var(--muted); margin-bottom:16px;">
+            Accéder aux indicateurs spécifiques pour chaque entité :
+        </div>
+        
+        <div class="nav-grid">
+            <a href="05-pole-dv.html" class="nav-card">
+                <span>Le Pôle DV (École & Collège)</span>
+                <span class="nav-arrow">➜</span>
+            </a>
+            <a href="06-lycee-pro.html" class="nav-card">
+                <span>Le Lycée Professionnel</span>
+                <span class="nav-arrow">➜</span>
+            </a>
+        </div>
+      </div>
+    </section>
+
+    <footer class=foot>
+      <div>Projet d’établissement 2026-2030 — Cité scolaire René Pellet</div>
+    </footer>
+  </div>
+
+  <div class=tooltip id=tip></div>
+
+  <script>
+    ;(function(){
+      try{
+        localStorage.setItem("pe_last_file", (location.pathname.split("/").pop() || "04-indicateurs-csrp.html"))
+      }catch(e){}
+    })()
+
+    const data = [
+      { annee:"2019-2020", notifie:500, effectif:280, aesh:8,  ulis:2, note:"" },
+      { annee:"2020-2021", notifie:720, effectif:420, aesh:13, ulis:2, note:"" },
+      { annee:"2021-2022", notifie:650, effectif:460, aesh:15, ulis:3, note:"création 2e ULIS LP TFC" },
+      { annee:"2022-2023", notifie:820, effectif:730, aesh:26, ulis:3, note:"création ULIS LP TSA" },
+      { annee:"2023-2024", notifie:790, effectif:710, aesh:27, ulis:4, note:"" },
+      { annee:"2024-2025", notifie:940, effectif:770, aesh:38, ulis:4, note:"" },
+      { annee:"2025-2026", notifie:940, effectif:820, aesh:33, ulis:4, note:"" }
+    ]
+
+    const state = { showNotifie:true, showEffectif:true }
+
+    const svg = document.getElementById("chart")
+    const tip = document.getElementById("tip")
+    const tbl = document.getElementById("tbl")
+    // Note: dataDump variable removed as the element is gone
+
+    function el(name, attrs){
+      const n = document.createElementNS("http://www.w3.org/2000/svg", name)
+      if(attrs) Object.keys(attrs).forEach(k => n.setAttribute(k, attrs[k]))
+      return n
+    }
+
+    function showTip(x,y,html){
+      tip.innerHTML = html
+      tip.style.left = x + "px"
+      tip.style.top = y + "px"
+      tip.style.display = "block"
+    }
+    function hideTip(){ tip.style.display = "none" }
+
+    function draw(){
+      while(svg.firstChild) svg.removeChild(svg.firstChild)
+
+      const W=760, H=360
+      const padL=56, padR=18, padT=18, padB=78
+      const plotW = W - padL - padR
+      const plotH = H - padT - padB
+
+      const maxY = 1000
+      const yToPx = v => padT + plotH - (v/maxY)*plotH
+
+      const grid = el("g")
+      const ticks = [0,200,400,600,800,1000]
+      ticks.forEach(t=>{
+        const y = yToPx(t)
+        grid.appendChild(el("line",{x1:padL, y1:y, x2:W-padR, y2:y, stroke:"rgba(255,255,255,.10)"}))
+        const tx = el("text",{x:padL-10, y:y+4, "text-anchor":"end", fill:"rgba(159,176,208,.95)", "font-size":"12"})
+        tx.textContent = t
+        grid.appendChild(tx)
+      })
+      svg.appendChild(grid)
+
+      const n = data.length
+      const groupW = plotW / n
+      const barW = Math.min(24, groupW*0.28)
+      const gap = 10
+
+      function addBars(key, color, offset){
+        data.forEach((d,i)=>{
+          const v = d[key]
+          const x = padL + i*groupW + (groupW/2) + offset
+          const y = yToPx(v)
+          const h = padT + plotH - y
+          const r = el("rect",{
+            x:(x - barW/2), y:y, width:barW, height:h,
+            rx:"6", fill:color, opacity:"0.95"
+          })
+          r.addEventListener("mousemove",(e)=>{
+            const html =
+              "<b>"+d.annee+"</b>"+
+              "Heures notifiées : "+d.notifie+"<br>"+
+              "Heures effectives : "+d.effectif+"<br>"+
+              "Nb AESH : "+d.aesh+"<br>"+
+              "Nb ULIS : "+d.ulis+(d.note?("<br>"+d.note):"")
+            showTip(e.clientX, e.clientY, html)
+          })
+          r.addEventListener("mouseleave", hideTip)
+          svg.appendChild(r)
+        })
+      }
+
+      if(state.showNotifie) addBars("notifie","var(--accent)", -(barW/2 + gap/2))
+      if(state.showEffectif) addBars("effectif","var(--accent2)", +(barW/2 + gap/2))
+
+      data.forEach((d,i)=>{
+        const x = padL + i*groupW + groupW/2
+        const t1 = el("text",{x:x, y:H-padB+24, "text-anchor":"middle", fill:"rgba(159,176,208,.95)", "font-size":"12"})
+        t1.textContent = d.annee.split("-")[0]
+        const t2 = el("text",{x:x, y:H-padB+40, "text-anchor":"middle", fill:"rgba(159,176,208,.95)", "font-size":"12"})
+        t2.textContent = d.annee.split("-")[1]
+        svg.appendChild(t1); svg.appendChild(t2)
+      })
+
+      const title = el("text",{x:padL, y:14, fill:"rgba(159,176,208,.95)", "font-size":"12"})
+      title.textContent = "Évolution du PIAL entre 2019 et 2025"
+      svg.appendChild(title)
+    }
+
+    function renderTable(){
+      tbl.innerHTML = ""
+      data.forEach(d=>{
+        const row = document.createElement("div")
+        row.className = "row"
+        row.innerHTML =
+          "<div><b>"+d.annee+"</b> <span class=r>— AESH "+d.aesh+", ULIS "+d.ulis+"</span></div>"+
+          "<div class=r>"+(d.note||"")+"</div>"
+        tbl.appendChild(row)
+      })
+    }
+
+    function toggle(btn, key){
+      const pressed = btn.getAttribute("aria-pressed") === "true"
+      btn.setAttribute("aria-pressed", String(!pressed))
+      state[key] = !pressed
+      draw()
+    }
+
+    const tNotifie = document.getElementById("tNotifie")
+    const tEffectif = document.getElementById("tEffectif")
+
+    tNotifie.addEventListener("click", ()=>toggle(tNotifie,"showNotifie"))
+    tEffectif.addEventListener("click", ()=>toggle(tEffectif,"showEffectif"))
+    tNotifie.addEventListener("keydown", e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); toggle(tNotifie,"showNotifie") } })
+    tEffectif.addEventListener("keydown", e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); toggle(tEffectif,"showEffectif") } })
+
+    // JSON Dump removed
+
+    draw()
+    renderTable()
+  </script>
+</body>
+</html>

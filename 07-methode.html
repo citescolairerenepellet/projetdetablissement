@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang=fr>
+<head>
+  <meta charset=utf-8>
+  <meta name=viewport content="width=device-width,initial-scale=1">
+  <title>Méthode retenue — CSRP</title>
+  <meta name=color-scheme content="light dark">
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card:#101a2f;
+      --muted:#9fb0d0;
+      --text:#eaf0ff;
+      --line:rgba(255,255,255,.10);
+      --accent:#6ee7ff;
+      --accent2:#a78bfa;
+      --accent3:#34d399;
+      --shadow: 0 18px 55px rgba(0,0,0,.35);
+      --radius:20px;
+    }
+    @media (prefers-color-scheme: light){
+      :root{
+        --bg:#f5f7ff;
+        --card:#ffffff;
+        --muted:#53627a;
+        --text:#0b1220;
+        --line:rgba(0,0,0,.10);
+        --shadow: 0 18px 55px rgba(30,41,59,.14);
+      }
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(1200px 800px at 10% 0%, rgba(110,231,255,.16), transparent 60%),
+        radial-gradient(900px 700px at 100% 10%, rgba(167,139,250,.14), transparent 55%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.55;
+    }
+    a{color:inherit; text-decoration:none}
+    .wrap{max-width:1100px; margin:0 auto; padding:22px 16px 56px}
+    
+    .topbar{
+      display:flex; gap:12px; align-items:center; justify-content:space-between;
+      padding:14px 14px;
+      background: color-mix(in oklab, var(--card), transparent 10%);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      position: sticky; top:12px; z-index:10;
+      backdrop-filter: blur(10px);
+    }
+    
+    .brand{display:flex; gap:12px; align-items:center; min-width: 240px;}
+    .logo{
+      width:44px; height:44px; border-radius:14px; overflow:hidden;
+      border:1px solid var(--line);
+      background:linear-gradient(135deg, rgba(110,231,255,.22), rgba(167,139,250,.18));
+      display:grid; place-items:center;
+    }
+    .logo img{width:100%; height:100%; object-fit:cover}
+
+    .brand h1{font-size:16px; margin:0}
+    .brand p{margin:2px 0 0; font-size:12px; color:var(--muted)}
+    
+    .nav{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end}
+    .pill{
+      padding:10px 12px; border-radius:999px;
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 12%);
+      font-size:13px;
+    }
+    .pill:hover{transform: translateY(-1px)}
+    @media (max-width: 920px){
+      .topbar{flex-direction:column; align-items:stretch}
+      .nav{justify-content:flex-start}
+    }
+
+    .hero{
+      margin-top:18px;
+      padding:22px 18px;
+      border-radius: calc(var(--radius) + 6px);
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, color-mix(in oklab, var(--card), transparent 6%), color-mix(in oklab, var(--card), transparent 14%));
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+      text-align: center;
+    }
+    .hero:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(700px 260px at 12% 0%, rgba(110,231,255,.18), transparent 62%),
+        radial-gradient(600px 260px at 88% 0%, rgba(52,211,153,.14), transparent 62%);
+      pointer-events:none;
+    }
+    .hero > *{position:relative}
+    .hero h2{margin:0; font-size:28px}
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:14px;
+      margin-top:14px;
+    }
+
+    .card{
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 6%);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:16px;
+    }
+    .card h3{margin:0 0 10px; font-size:16px}
+    .muted{color:var(--muted)}
+
+    /* Style des étapes (Timeline) */
+    .steps{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap:12px;
+      margin-top:10px;
+    }
+    .step{
+      padding:16px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 10%);
+      display:flex; gap:12px; align-items:flex-start;
+    }
+    .num{
+      width:32px; height:32px; border-radius:10px; flex-shrink:0;
+      display:grid; place-items:center; font-weight:900;
+      background: linear-gradient(135deg, rgba(110,231,255,.2), rgba(167,139,250,.2));
+      border:1px solid var(--line);
+      color:var(--accent);
+    }
+    .stepContent h4{margin:0 0 4px; font-size:14px}
+    .stepContent p{margin:0; font-size:13px; color:var(--muted); line-height:1.4}
+
+    /* Style pour le texte intégral (Details) */
+    details{
+      border:1px solid var(--line);
+      border-radius:18px;
+      background: color-mix(in oklab, var(--card), transparent 10%);
+      overflow:hidden;
+      margin-top:0;
+    }
+    summary{
+      cursor:pointer;
+      list-style:none;
+      padding:14px 16px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      font-weight:900;
+      color: var(--text); 
+    }
+    summary::-webkit-details-marker{display:none}
+    .body{padding: 0 16px 16px; font-size:14px; color:var(--muted); text-align:justify; line-height:1.6}
+    .body p { margin: 0 0 12px; }
+    .body p:last-child { margin: 0; }
+
+    .chev{
+      width:24px;height:24px;flex:0 0 24px;
+      display:grid;place-items:center;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.1);
+      font-size:12px;
+      transition:transform .18s ease;
+      color:var(--text);
+    }
+    details[open] .chev{transform:rotate(180deg)}
+
+    .chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:8px}
+    .chip{
+      padding:6px 10px; border-radius:8px;
+      border:1px solid var(--line);
+      font-size:12px; color:var(--muted);
+      background: color-mix(in oklab, var(--card), transparent 14%);
+    }
+
+    /* Footer Standardisé */
+    .foot{
+      margin-top:18px;
+      padding:12px 16px;
+      border-top:1px solid rgba(0,0,0,.08);
+      color:#6b7280;
+      font-size:12px;
+      text-align:center;
+    }
+
+    @media print{
+      .topbar{position:static; box-shadow:none}
+      body{background:#fff}
+      .card,.hero,.topbar,details{box-shadow:none}
+    }
+  </style>
+</head>
+
+<body>
+  <div class=wrap>
+    <header class=topbar>
+      <a href="index.html" class=brand>
+        <div class="logo">
+           <img src="logo-csrp.png" alt="">
+        </div>
+        <div>
+          <h1>Projet d’établissement</h1>
+          <p>Méthode retenue</p>
+        </div>
+      </a>
+
+      <nav class=nav aria-label=Navigation>
+  <a class=pill href=index.html>Accueil</a>   <a class=pill href=01-sommaire.html>Sommaire</a>
+</nav>
+    </header>
+
+    <section class=hero>
+      <h2>Description de la méthode retenue pour ce projet</h2>
+    </section>
+
+    <section class=grid>
+      <div class=card>
+        <h3>Les étapes clés de la démarche</h3>
+        <div class="steps">
+          
+          <div class=step>
+            <div class=num>1</div>
+            <div class=stepContent>
+              <h4>Lancement & Pilotage</h4>
+              <p>Constitution d’un comité de pilotage représentatif (Direction, Professeurs, AESH, AED, Agents, Infirmière) pour définir le calendrier et la méthode.</p>
+            </div>
+          </div>
+
+          <div class=step>
+            <div class=num>2</div>
+            <div class=stepContent>
+              <h4>Travail Collectif</h4>
+              <p>Organisation de commissions multi-catégorielles avec les parents et les partenaires (S3AS, CTRDV, SESSAD Emile Zola, Service jeunesse).</p>
+            </div>
+          </div>
+
+          <div class=step>
+            <div class=num>3</div>
+            <div class=stepContent>
+              <h4>Consultation large</h4>
+              <p>Possibilité pour l’ensemble des parents et élèves de s’exprimer via les questionnaires en ligne du CEE.</p>
+            </div>
+          </div>
+
+          <div class=step>
+            <div class=num>4</div>
+            <div class=stepContent>
+              <h4>Évaluation & Construction</h4>
+              <p>Évaluation externe en avril-juin 2025. Utilisation des conclusions pour bâtir le nouveau projet dès juillet 2025.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="grid" style="margin-top:14px;">
+        <details>
+            <summary>
+                Lire le texte intégral du rapport d'activité
+                <span class="chev">▼</span>
+            </summary>
+            <div class="body">
+                <p>La Cité Scolaire René Pellet a été retenue par l’Institution pour entrer dans la démarche d’évaluation des établissements et réaliser celle-ci au cours de l’année scolaire 2024-2025. L’auto-évaluation, première étape de ce processus, a mobilisé l’ensemble de la communauté de la CSRP durant le premier trimestre.</p>
+                <p>Un comité de pilotage, composé de l’équipe de direction, de professeurs des trois structures, d’AESH, d’AED, d’agents de maintenance et d’entretien, ainsi que d’une infirmière, s’est réuni à plusieurs reprises pour s’approprier la démarche, définir un calendrier et organiser des temps de réflexion et d’analyse pour l’ensemble de la communauté.</p>
+                <p>Deux temps de travail collectif ont été organisées par le comité de pilotage. Ces temps ont rassemblé des commissions multi-catégorielles, auxquelles des parents d’élèves représentants élus et des partenaires (S3AS, CTRDV, SESSAD Emile Zola, Service jeunesse de la ville) se sont joints. Parallèlement, l’ensemble des parents et des élèves de l’établissement ont eu la possibilité de s’exprimer via les questionnaires du CEE mis à disposition en ligne.</p>
+                <p>Ce travail collectif a représenté des étapes clés dans la vie de l’établissement. Il a rassemblé un grand nombre de participants et donné lieu à des échanges constructifs. Ces moments de réflexion collective ont également contribué à réaffirmer l’identité de la Cité Scolaire René Pellet, à renforcer la cohésion entre ses membres et à faire équipe.</p>
+                <p>L’évaluation externe et son retour à la communauté s’est déroulé en avril et juin 2025. Les conclusions positives et les pistes d’orientation pour 2026-2030 esquissée ont été un point de départ pour la construction du futur projet d’établissement qui débuta dès juillet 2025. La communauté scolaire est repartie des axes d’améliorations qu’elle avait dégagé dans le cadre de l’auto-évaluation pour bâtir le cadre de ce futur projet d’établissement. Le comité de pilotage de l’auto évaluation a mué en comité de pilotage du projet d’établissement et a coordonnée la réflexion collective puis la rédaction de ce projet.</p>
+            </div>
+        </details>
+    </section>
+
+    <footer class=foot>
+      <div>Projet d’établissement 2026-2030 — Cité scolaire René Pellet</div>
+    </footer>
+  </div>
+
+  <script>
+    ;(function(){
+      try{
+        localStorage.setItem("pe_last_file", (location.pathname.split("/").pop() || "07-methode.html"))
+      }catch(e){}
+    })()
+  </script>
+</body>
+</html>

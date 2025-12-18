@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Sommaire — Projet d’établissement 2026-2030</title>
+  <meta name="color-scheme" content="light dark">
+  <style>
+    :root{
+      --bg:#0b1220; --card:#101a2f; --text:#eaf0ff; --muted:#9fb0d0; --line:rgba(255,255,255,.10);
+      --shadow:0 18px 55px rgba(0,0,0,.35); --r:20px;
+      --accent:#6ee7ff;
+    }
+    @media (prefers-color-scheme: light){
+      :root{
+        --bg:#f5f7ff; --card:#fff; --text:#0b1220; --muted:#53627a; --line:rgba(0,0,0,.10);
+        --shadow:0 18px 55px rgba(30,41,59,.14);
+        --accent:#0284c7;
+      }
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family:ui-sans-serif,system-ui,-apple-system,sans-serif;
+      background:radial-gradient(1200px 800px at 50% 0%, rgba(110,231,255,.12), transparent 60%), var(--bg);
+      color:var(--text); line-height:1.5;
+    }
+    a{color:inherit; text-decoration:none}
+    .wrap{max-width:800px; margin:0 auto; padding:20px 16px 60px}
+    
+    /* Header simplifié */
+    .topbar{
+      display:flex; gap:12px; align-items:center; justify-content:space-between;
+      padding:14px; border:1px solid var(--line); border-radius:var(--r);
+      background:color-mix(in oklab, var(--card), transparent 10%);
+      box-shadow:var(--shadow); margin-bottom: 20px;
+      backdrop-filter: blur(10px);
+    }
+    .brand{display:flex; gap:12px; align-items:center; font-weight: 700;}
+    .pill{
+      padding:8px 16px; border-radius:99px; border:1px solid var(--line);
+      background:color-mix(in oklab, var(--card), transparent 12%);
+      font-size:13px; transition: 0.2s;
+    }
+    .pill:hover{background:var(--accent); color: white; border-color: var(--accent);}
+
+    /* Barre de recherche */
+    .search-box{
+      margin-bottom: 24px; position: relative;
+    }
+    .search-input{
+      width: 100%; padding: 16px 20px 16px 50px;
+      border-radius: var(--r); border: 1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 5%);
+      color: var(--text); font-size: 16px; outline: none;
+      box-shadow: var(--shadow);
+      transition: border-color 0.2s;
+    }
+    .search-input:focus{ border-color: var(--accent); }
+    .search-icon{
+      position: absolute; left: 18px; top: 50%; transform: translateY(-50%);
+      width: 20px; height: 20px; color: var(--muted); pointer-events: none;
+    }
+
+    /* Liste */
+    .section-title{
+        font-size: 13px; text-transform: uppercase; letter-spacing: 1px;
+        color: var(--muted); margin: 24px 0 8px 8px; font-weight: 800;
+    }
+    
+    .item{
+      display:block; text-decoration:none;
+      padding:16px; margin-bottom: 8px;
+      border:1px solid var(--line); border-radius:16px;
+      background:color-mix(in oklab, var(--card), transparent 20%);
+      transition:transform .2s, background .2s;
+    }
+    .item:hover{
+      transform:translateY(-2px);
+      background:color-mix(in oklab, var(--card), transparent 5%);
+      border-color: var(--accent);
+    }
+    .item .t{font-weight:700; font-size:16px; color: var(--text); margin-bottom: 4px;}
+    .item .s{font-size:14px; color:var(--muted);}
+
+    /* Style si caché par la recherche */
+    .hidden { display: none; }
+
+    .foot{
+      margin-top:40px; text-align:center; font-size:12px; color:var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrap">
+    
+    <header class="topbar">
+      <div class="brand">Table des matières</div>
+      <a class="pill" href="index.html">Retour Accueil</a>
+    </header>
+
+    <div class="search-box">
+        <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+        <input type="text" id="q" class="search-input" placeholder="Rechercher une section, un mot clé..." autofocus>
+    </div>
+
+    <div id="list">
+      
+      <div class="group">
+        <div class="section-title">Présentation & Contexte</div>
+        
+        <a class="item" href="02-infographie-2025-2026.html" data-keywords="chiffres clés effectifs budget personnels">
+          <div class="t">Infographie 2025-2026</div>
+          <div class="s">Vue d'ensemble des structures et moyens</div>
+        </a>
+        <a class="item" href="03-contexte.html" data-keywords="histoire situation géographie public">
+          <div class="t">Éléments de contexte</div>
+          <div class="s">Histoire, localisation et spécificités de l'EREA</div>
+        </a>
+        <a class="item" href="04-ecole.html" data-keywords="primaire élémentaire">
+          <div class="t">École élémentaire</div>
+          <div class="s">Structure pédagogique</div>
+        </a>
+        <a class="item" href="05-college.html" data-keywords="cycle 3 cycle 4">
+          <div class="t">Collège</div>
+          <div class="s">Structure pédagogique</div>
+        </a>
+        <a class="item" href="06-lycee-pro.html" data-keywords="lp cap bac pro formation professionnelle">
+          <div class="t">Lycée Professionnel</div>
+          <div class="s">Structure pédagogique et formations</div>
+        </a>
+      </div>
+
+      <div class="group">
+        <div class="section-title">Cadrage</div>
+        
+        <a class="item" href="07-methode.html" data-keywords="démarche méthodologie comité pilotage">
+          <div class="t">Méthode retenue</div>
+          <div class="s">Construction du projet d'établissement</div>
+        </a>
+        <a class="item" href="08-introduction.html" data-keywords="général ambition valeurs">
+          <div class="t">Introduction générale</div>
+          <div class="s">Vision globale et axes structurants</div>
+        </a>
+      </div>
+
+      <div class="group">
+        <div class="section-title">Première partie : Le Projet</div>
+        
+        <a class="item" href="09-axe1.html" data-keywords="parcours réussite orientation">
+          <div class="t">Axe 1 : Parcours personnalisé</div>
+          <div class="s">Construire un projet de réussite pour chaque élève</div>
+        </a>
+        <a class="item" href="10-axe2.html" data-keywords="accessibilité fondamentaux pédagogie">
+          <div class="t">Axe 2 : Accessibilité & Fondamentaux</div>
+          <div class="s">Garantir l'accès aux apprentissages pour tous</div>
+        </a>
+        <a class="item" href="11-axe3.html" data-keywords="bien-être climat scolaire vie">
+          <div class="t">Axe 3 : Bien-être</div>
+          <div class="s">S'engager pour le bien-être élèves et personnels</div>
+        </a>
+        <a class="item" href="12-axe4.html" data-keywords="identité ressource inclusion partenariat">
+          <div class="t">Axe 4 : Identité & Ressource</div>
+          <div class="s">Affirmer l'identité EREA et devenir établissement ressource</div>
+        </a>
+      </div>
+
+      <div class="group">
+        <div class="section-title">Deuxième partie : Évaluation</div>
+        
+        <a class="item" href="13-mise-en-oeuvre-axe1.html" data-keywords="indicateurs évaluation axe 1">
+          <div class="t">Évaluation : Axe 1</div>
+          <div class="s">Indicateurs de suivi du parcours personnalisé</div>
+        </a>
+        <a class="item" href="14-mise-en-oeuvre-axe2.html" data-keywords="indicateurs évaluation axe 2">
+          <div class="t">Évaluation : Axe 2</div>
+          <div class="s">Indicateurs de suivi de l'accessibilité</div>
+        </a>
+        <a class="item" href="15-mise-en-oeuvre-axe3.html" data-keywords="indicateurs évaluation axe 3">
+          <div class="t">Évaluation : Axe 3</div>
+          <div class="s">Indicateurs de suivi du bien-être</div>
+        </a>
+        <a class="item" href="16-mise-en-oeuvre-axe4.html" data-keywords="indicateurs évaluation axe 4">
+          <div class="t">Évaluation : Axe 4</div>
+          <div class="s">Indicateurs de suivi de l'identité ressource</div>
+        </a>
+      </div>
+
+      <div class="group">
+        <div class="section-title">Clôture</div>
+        <a class="item" href="17-conclusion.html" data-keywords="fin signature comité">
+          <div class="t">Conclusion</div>
+          <div class="s">Le mot de la fin</div>
+        </a>
+      </div>
+
+    </div>
+
+    <footer class="foot">
+      Projet d’établissement 2026-2030
+    </footer>
+  </div>
+
+  <script>
+    // Script de recherche instantanée
+    const input = document.getElementById('q');
+    const items = document.querySelectorAll('.item');
+    const groups = document.querySelectorAll('.group');
+
+    function filter(){
+        const term = input.value.toLowerCase();
+        
+        items.forEach(item => {
+            const text = (item.innerText + " " + item.dataset.keywords).toLowerCase();
+            if(text.includes(term)){
+                item.classList.remove('hidden');
+            } else {
+                item.classList.add('hidden');
+            }
+        });
+
+        // Masquer les titres de section vides
+        groups.forEach(group => {
+            const visibleItems = group.querySelectorAll('.item:not(.hidden)');
+            const title = group.querySelector('.section-title');
+            if(visibleItems.length === 0){
+                title.classList.add('hidden');
+            } else {
+                title.classList.remove('hidden');
+            }
+        });
+    }
+
+    input.addEventListener('input', filter);
+  </script>
+
+</body>
+</html>

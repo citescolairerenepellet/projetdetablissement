@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Introduction générale — CSRP</title>
+  <meta name="color-scheme" content="light dark">
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card:#101a2f;
+      --muted:#9fb0d0;
+      --text:#eaf0ff;
+      --line:rgba(255,255,255,.10);
+      --accent:#6ee7ff;
+      --accent2:#a78bfa;
+      --accent3:#34d399;
+      --shadow: 0 18px 55px rgba(0,0,0,.35);
+      --radius:20px;
+    }
+    @media (prefers-color-scheme: light){
+      :root{
+        --bg:#f5f7ff;
+        --card:#ffffff;
+        --muted:#53627a;
+        --text:#0b1220;
+        --line:rgba(0,0,0,.10);
+        --shadow: 0 18px 55px rgba(30,41,59,.14);
+      }
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(1200px 800px at 10% 0%, rgba(110,231,255,.16), transparent 60%),
+        radial-gradient(900px 700px at 100% 10%, rgba(167,139,250,.14), transparent 55%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.55;
+    }
+    a{color:inherit; text-decoration:none}
+    .wrap{max-width:1100px; margin:0 auto; padding:22px 16px 56px}
+    
+    .topbar{
+      display:flex; gap:12px; align-items:center; justify-content:space-between;
+      padding:14px 14px;
+      background: color-mix(in oklab, var(--card), transparent 10%);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      position: sticky; top:12px; z-index:10;
+      backdrop-filter: blur(10px);
+    }
+    
+    .brand{display:flex; gap:12px; align-items:center; min-width: 240px;}
+    .logo{
+      width:44px; height:44px; border-radius:14px; overflow:hidden;
+      border:1px solid var(--line);
+      background:linear-gradient(135deg, rgba(110,231,255,.22), rgba(167,139,250,.18));
+      display:grid; place-items:center;
+    }
+    .logo img{width:100%; height:100%; object-fit:cover}
+
+    .brand h1{font-size:16px; margin:0}
+    .brand p{margin:2px 0 0; font-size:12px; color:var(--muted)}
+    
+    .nav{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end}
+    .pill{
+      padding:10px 12px; border-radius:999px;
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 12%);
+      font-size:13px;
+    }
+    .pill:hover{transform: translateY(-1px)}
+    @media (max-width: 920px){
+      .topbar{flex-direction:column; align-items:stretch}
+      .nav{justify-content:flex-start}
+    }
+
+    .hero{
+      margin-top:18px;
+      padding:22px 18px;
+      border-radius: calc(var(--radius) + 6px);
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, color-mix(in oklab, var(--card), transparent 6%), color-mix(in oklab, var(--card), transparent 14%));
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+      text-align: center;
+    }
+    .hero:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(700px 260px at 12% 0%, rgba(110,231,255,.18), transparent 62%),
+        radial-gradient(600px 260px at 88% 0%, rgba(52,211,153,.14), transparent 62%);
+      pointer-events:none;
+    }
+    .hero > *{position:relative}
+    .hero h2{margin:0; font-size:28px}
+    .hero p{margin:10px auto 0; font-size:16px; color:var(--muted); max-width:80ch;}
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+      margin-top:14px;
+    }
+    @media (max-width: 800px){
+      .grid{grid-template-columns:1fr}
+    }
+
+    .card{
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card), transparent 6%);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:16px;
+    }
+    .card h3{margin:0 0 10px; font-size:16px}
+    .muted{color:var(--muted)}
+
+    /* --- ANIMATION DES CHIPS --- */
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-4px); }
+      100% { transform: translateY(0px); }
+    }
+
+    .chips{display:flex; flex-wrap:wrap; gap:10px; margin-top:10px}
+    
+    .chip{
+      padding:8px 12px; border-radius:10px;
+      border:1px solid var(--line);
+      font-size:13px; font-weight:600;
+      background: color-mix(in oklab, var(--card), transparent 10%);
+      animation: float 3s ease-in-out infinite;
+      transition: all 0.3s ease;
+    }
+    .chip:nth-child(1) { animation-delay: 0s; }
+    .chip:nth-child(2) { animation-delay: 0.3s; }
+    .chip:nth-child(3) { animation-delay: 0.6s; }
+    .chip:nth-child(4) { animation-delay: 0.9s; }
+    .chip:nth-child(5) { animation-delay: 1.2s; }
+    .chip:nth-child(6) { animation-delay: 1.5s; }
+    .chip:nth-child(7) { animation-delay: 1.8s; }
+
+    .chip:hover{
+        animation-play-state: paused;
+        transform: scale(1.05) translateY(-2px);
+        border-color: var(--accent);
+        background: linear-gradient(135deg, rgba(110,231,255,.15), rgba(167,139,250,.15));
+        color: var(--text);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .list-axes{
+        display: grid; gap: 10px; margin-top: 12px;
+    }
+    .axis-item{
+        display: flex; gap: 12px; align-items: flex-start;
+        padding: 12px;
+        background: color-mix(in oklab, var(--card), transparent 12%);
+        border-radius: 12px;
+        border: 1px solid var(--line);
+        font-size: 14px;
+        transition: transform 0.2s, background 0.2s;
+    }
+    .axis-item:hover{
+        transform: translateX(4px);
+        background: color-mix(in oklab, var(--card), transparent 18%);
+        border-color: var(--accent2);
+    }
+    .axis-num{
+        background: var(--accent2); color: white;
+        width: 24px; height: 24px; border-radius: 50%;
+        display: grid; place-items: center; font-weight: bold; font-size: 12px;
+        flex-shrink: 0; margin-top: -2px;
+    }
+
+    /* Style spécifique pour la carte mentale */
+    .mindmap-container {
+        margin-top: 14px;
+        text-align: center;
+        background: color-mix(in oklab, var(--card), transparent 2%); /* Fond légèrement plus opaque */
+    }
+    .mindmap-img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 12px;
+        border: 1px solid var(--line);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+    }
+    .mindmap-img:hover {
+        transform: scale(1.01);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    }
+
+    details{
+      border:1px solid var(--line);
+      border-radius:18px;
+      background: color-mix(in oklab, var(--card), transparent 10%);
+      overflow:hidden;
+      margin-top:14px;
+    }
+    summary{
+      cursor:pointer;
+      list-style:none;
+      padding:14px 16px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      font-weight:900;
+      color: var(--text); 
+    }
+    summary::-webkit-details-marker{display:none}
+    .body{padding: 0 18px 18px; font-size:15px; color:var(--muted); text-align:justify; line-height:1.7}
+    .body h4{ color: var(--text); margin: 24px 0 8px; font-size: 16px; }
+    .body p { margin: 0 0 12px; }
+    .body ul { margin: 0 0 12px; padding-left: 20px; }
+    .body li { margin-bottom: 6px; }
+
+    .chev{
+      width:24px;height:24px;flex:0 0 24px;
+      display:grid;place-items:center;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.1);
+      font-size:12px;
+      transition:transform .18s ease;
+      color:var(--text);
+    }
+    details[open] .chev{transform:rotate(180deg)}
+
+    .foot{
+      margin-top:18px;
+      padding:12px 16px;
+      border-top:1px solid rgba(0,0,0,.08);
+      color:#6b7280;
+      font-size:12px;
+      text-align:center;
+    }
+
+    @media print{
+      .topbar{position:static; box-shadow:none}
+      body{background:#fff}
+      .card,.hero,.topbar,details{box-shadow:none}
+    }
+  </style>
+</head>
+
+<body>
+  <div class=wrap>
+    <header class=topbar>
+      <a href="index.html" class=brand>
+        <div class="logo">
+           <img src="logo-csrp.png" alt="">
+        </div>
+        <div>
+          <h1>Projet d’établissement</h1>
+          <p>Introduction générale</p>
+        </div>
+      </a>
+
+      <nav class=nav aria-label=Navigation>
+        <a class=pill href=index.html>Accueil</a>   <a class=pill href=01-sommaire.html>Sommaire</a>
+      </nav>
+    </header>
+
+    <section class=hero>
+      <h2>Une ambition commune</h2>
+      <p>La réussite de tous dans un cadre bienveillant et exigeant.</p>
+    </section>
+
+    <section class=grid>
+      <div class=card>
+        <h3>Notre identité et nos valeurs</h3>
+        <p style="font-size:14px; color:var(--muted); margin-bottom:12px;">
+            Une feuille de route collective au service de la réussite de tous les élèves, en lien avec les familles et partenaires.
+        </p>
+        <div class=chips>
+            <span class=chip>Exigence</span>
+            <span class=chip>Bienveillance</span>
+            <span class=chip>Coopération</span>
+            <span class=chip>Inclusion</span>
+            <span class=chip>Ouverture</span>
+            <span class=chip>Culture de projet</span>
+            <span class=chip>Innovation pédagogique</span>
+        </div>
+      </div>
+
+      <div class=card>
+        <h3>4 orientations structurantes</h3>
+        <div class="list-axes">
+            <div class="axis-item">
+                <div class="axis-num">1</div>
+                <div>Construire, pour chaque élève, un parcours personnalisé et un projet de réussite.</div>
+            </div>
+            <div class="axis-item">
+                <div class="axis-num">2</div>
+                <div>Garantir l’accessibilité des apprentissages et la maîtrise des savoirs fondamentaux.</div>
+            </div>
+            <div class="axis-item">
+                <div class="axis-num">3</div>
+                <div>S’engager pour le bien-être de tous, élèves et personnels.</div>
+            </div>
+            <div class="axis-item">
+                <div class="axis-num">4</div>
+                <div>Affirmer l’identité singulière de l’EREA et devenir un établissement ressource.</div>
+            </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card mindmap-container">
+        <h3 style="margin-bottom:16px;">Synthèse visuelle du projet</h3>
+        <img src="carte-mentale.png" alt="Carte mentale du projet 2026-2030" class="mindmap-img">
+    </section>
+
+    <section>
+        <details>
+            <summary>
+                Lire le texte intégral de l'introduction
+                <span class="chev">▼</span>
+            </summary>
+            <div class="body">
+                <p>Le projet d’établissement de la Cité scolaire René Pellet – EREA DV s’inscrit dans une démarche collective et ambitieuse au service de la réussite de tous les élèves.</p>
+                <p>Il constitue la feuille de route de la communauté éducative pour les prochaines années, en cohérence avec les orientations nationales et académiques, et en lien étroit avec les besoins spécifiques de ses usagers – élèves, familles, et personnels.</p>
+                <p>Notre établissement accueille des élèves aux profils variés, dont la majorité présentent des besoins éducatifs particuliers. Cette diversité représente une richesse humaine et pédagogique qui fonde notre identité et notre mission : offrir à chaque élève un parcours de réussite, personnalisé, inclusif et émancipateur.</p>
+
+                <h4>Une ambition commune : la réussite de tous dans un cadre bienveillant et exigeant</h4>
+                <p>L’ensemble des équipes – enseignants, personnels d’éducation, de santé, administratifs et techniques – œuvre chaque jour pour garantir à chaque élève les conditions d’un apprentissage solide, accessible et porteur de sens.</p>
+                <p>Notre action repose sur des valeurs partagées : l’exigence, la bienveillance, la coopération, l’inclusion et l’ouverture. Ces valeurs guident nos pratiques et nourrissent notre ambition d’une école qui accompagne chacun vers la réussite scolaire, personnelle et professionnelle.</p>
+
+                <h4>Une communauté éducative engagée et innovante</h4>
+                <p>L’EREA se veut un lieu d’expérimentation et d’innovation pédagogique, où le collectif est au cœur des dynamiques de progrès. Les équipes s’engagent à adapter leurs pratiques, à mutualiser leurs compétences et à faire vivre une culture de projet tournée vers l’avenir.</p>
+                <p>Notre établissement souhaite également affirmer son rôle de ressource et d’expertise en matière d’éducation inclusive, en partenariat avec les familles, le secteur médico-social et les acteurs institutionnels.</p>
+
+                <h4>Des orientations structurantes</h4>
+                <p>Ce projet d’établissement s’articule autour de quatre axes complémentaires et cohérents :</p>
+                <ul>
+                    <li>Construire, pour chaque élève, un parcours personnalisé et un projet de réussite.</li>
+                    <li>Garantir l’accessibilité des apprentissages et la maîtrise des savoirs fondamentaux pour tous.</li>
+                    <li>S’engager pour le bien-être de tous, élèves et personnels.</li>
+                    <li>Affirmer l’identité singulière de l’EREA et devenir un établissement ressource en matière d’école inclusive.</li>
+                </ul>
+                <p>Ces axes traduisent la volonté de la communauté éducative d’offrir un cadre d’apprentissage exigeant, bienveillant et innovant, au service d’une école véritablement inclusive, équitable et ouverte sur le monde.</p>
+            </div>
+        </details>
+    </section>
+
+    <footer class=foot>
+      <div>Projet d’établissement 2026-2030 — Cité scolaire René Pellet</div>
+    </footer>
+  </div>
+
+  <script>
+    ;(function(){
+      try{
+        localStorage.setItem("pe_last_file", (location.pathname.split("/").pop() || "08-introduction.html"))
+      }catch(e){}
+    })()
+  </script>
+</body>
+</html>
